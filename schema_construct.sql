@@ -9,7 +9,8 @@ create table Student
 first_name varchar(20),
 last_name varchar(20),
 program varchar(20),
-faculty varchar(2));
+faculty varchar(2),
+pword varchar(20));
 
 create table friends
 (frienderid char(8),
@@ -34,7 +35,8 @@ create table Professor
 (id char(8) primary key,
 first_name varchar(20),
 last_name varchar(20),
-on_break bit);
+on_break bit,
+pword varchar(20));
 
 create table Likes
 (sid char(8),
