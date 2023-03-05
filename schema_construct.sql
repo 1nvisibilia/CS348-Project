@@ -88,14 +88,6 @@ foreign key (sid)
 references student (id)
 on delete cascade,
 cid char(4),
-csub varchar(6),
-cnum varchar(4),
-foreign key (csub)
-references Component (csub)
-on delete cascade,
-foreign key (cnum)
-references Component (cnum)
-on delete cascade,
 foreign key (cid)
 references Component (id)
 on delete cascade,
