@@ -25,8 +25,8 @@ on delete cascade);
 create table Course
 (csub varchar(6),
 cnum varchar(4),
+credit numeric(3,2),
 title varchar(30),
-credit numeric(2,1),
 index num_ind (cnum),
 index sub_ind (csub),
 primary key (csub, cnum));
@@ -75,9 +75,9 @@ enddate date,
 starttime time,
 endtime time,
 weekday varchar(2),
-building varchar(3),
+building varchar(4),
 room varchar(4),
-pid char(6),
+pid char(8),
 foreign key (pid)
 references professor (id)
 on delete cascade);
