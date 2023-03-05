@@ -9,7 +9,7 @@ create table Student
 first_name varchar(20),
 last_name varchar(20),
 program varchar(20),
-faculty varchar(2),
+faculty varchar(20),
 pword varchar(20));
 
 create table friends
