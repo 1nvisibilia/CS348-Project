@@ -83,7 +83,7 @@ references professor (id)
 on delete cascade);
 
 create table Attends
-(sid char(8) primary key,
+(sid char(8),
 foreign key (sid)
 references student (id)
 on delete cascade,
@@ -98,7 +98,8 @@ references Component (cnum)
 on delete cascade,
 foreign key (cid)
 references Component (id)
-on delete cascade);
+on delete cascade,
+primary key (sid, cid));
 
 
 
