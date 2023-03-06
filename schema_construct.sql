@@ -75,7 +75,7 @@ enddate date,
 starttime time,
 endtime time,
 weekday varchar(2),
-building varchar(4),
+building varchar(6),
 room varchar(4),
 pid char(8),
 foreign key (pid)

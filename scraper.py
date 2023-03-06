@@ -96,7 +96,7 @@ for num in coursenums:
             timestart = comp[10][0:5]
             print("\""+timestart+"\", ", end=" ")#starttime
             timeend = comp[10][6:11]
-            print("\""+timestart+"\", ", end=" ")#endtime
+            print("\""+timeend+"\", ", end=" ")#endtime
 
             #only parsing one day for multidays
             weekday = comp[10][11]
@@ -109,9 +109,12 @@ for num in coursenums:
             print("NULL, ", end=" ")#room
         else:
             buildingInfo = comp[11].split()
-            print("\""+campusInfo[0]+"\", ", end=" ")#building
-            print("\""+campusInfo[1][0]+"\", ", end=" ")#roomnum
-        
+            print("\""+buildingInfo[0]+"\", ", end=" ")#building
+            if len(buildingInfo) > 1:
+                print("\""+buildingInfo[1]+"\", ", end=" ")#roomnum
+            else: 
+                print("NULL,", end=" ")#roomnum
+
         if len(comp) < 13 or comp[12] == "":
             print("NULL", end=" ")#pid
         else:
