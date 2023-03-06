@@ -36,15 +36,25 @@ AND cnum = 348
 and assocnum = 1;
 
 # R9 Feature 4
-# These are only update, delete, and create trigger statements which have no output
+# These are only insert, delete, and create trigger statements which have no output
+# We leave the following as examples for insert and delete on components for CS 343
+INSERT INTO attends
+    VALUES (10000000, 6125), (10000000, 6407);
 
+DELETE FROM attends
+    WHERE sid = 10000000 AND Cid IN
+    (SELECT id FROM component
+		WHERE csub = 'CS'
+		AND cnum = 343
+		AND assocnum = 1);
+		
 # R10 Feature 5
 
 SELECT *
 FROM component
 WHERE enrolltot < enrollcap
 AND csub = 'CS'
-AND cnum = 350;
-ORDER BY starttime, component.weekday DESC
+AND cnum = 350
+ORDER BY starttime, component.weekday DESC;
 
 
