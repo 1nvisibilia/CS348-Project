@@ -44,5 +44,7 @@ SELECT *
 FROM component
 WHERE enrolltot < enrollcap
 AND csub = 'CS'
-AND cnum = 245;
+AND cnum = 350;
+ORDER BY starttime, component.weekday DESC
+
 
