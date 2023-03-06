@@ -93,5 +93,40 @@ references Component (id)
 on delete cascade,
 primary key (sid, cid));
 
+DELIMITER $$
+CREATE TRIGGER component_update
+AFTER UPDATE ON Component
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT * FROM Component
+        WHERE starttime <= NEW.endtime
+        AND endtime >= NEW.starttime
+        AND building = NEW.building
+        AND room = NEW.room
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update not allowed. Component conflict exists.';
+    END IF;
+END$$
+DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER attends_insert
+BEFORE INSERT ON Attends
+FOR EACH ROW
+BEGIN
+	IF EXISTS (
+		SELECT *
+        FROM Component c
+        JOIN Attends a ON c.id = a.cid
+        WHERE a.sid = NEW.sid
+        AND c.starttime <= ( SELECT endtime FROM Component c2 WHERE NEW.cid = c2.id)
+        AND c.endtime >= ( SELECT starttime FROM Component c3 WHERE NEW.cid = c3.id)
+        AND c.weekday = ( SELECT weekday FROM Component c4 WHERE NEW.cid = c4.id)
+	)
+    THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insert not allowed. Attends conflict exists.';
+	END IF;
+END$$
+DELIMITER ;
 
