@@ -36,6 +36,7 @@ AND cnum = 348
 and assocnum = 1;
 
 # We leave the following as examples for insert and delete on attends for CS 343
+# Note that there is no output for these statements.
 INSERT INTO attends
     VALUES (10000000, 6125), (10000000, 6407);
 
@@ -48,6 +49,13 @@ DELETE FROM attends
 
 # R9 Feature 4
 # These are only update, delete, and create trigger statements which have no output
+# We leave the following as examples for update and delete
+UPDATE component
+SET building = 'M3', room = 1006
+WHERE id = 6010 AND pid = 10000025;
+
+DELETE FROM component
+WHERE id = 6256;
 
 # R10 Feature 5
 SELECT *
