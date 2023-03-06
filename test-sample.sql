@@ -12,7 +12,7 @@ FROM student INNER JOIN (
 ON id = friendeeid
 
 # R7 Feature 2
-# Assume user has searched for 'CS 348'
+# Assume user has searched for 'CS 343'
 
 SELECT *
 FROM course
