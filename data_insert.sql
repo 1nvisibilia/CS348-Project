@@ -361,3 +361,36 @@ insert into component values ( 9388,  "CS",  "499R",  "RDG",  "002",  "UW",  "U"
 insert into component values ( 9403,  "CS",  "499R",  "RDG",  "003",  "UW",  "U",  3,  1,  1,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL );
 insert into course values ( 'CS' , '499T' , '0.5' , 'Honours Thesis' );
 insert into component values ( 9378,  "CS",  "499T",  "PRJ",  "001",  "UW",  "U",  1,  1,  1,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  10000048 );
+
+insert into student values(10000000, "Karan", "Manku", "Computer Science", "Math", "karanmanku");
+insert into student values(20000000, "Henry", "Guo", "Computer Science", "Math", "henryguo");
+insert into student values(30000000, "Ryan", "Zhang", "Computer Science", "Math", "ryanzhang");
+insert into student values(40000000, "Jiadi", "Tao", "Computer Science", "Math", "jiaditao");
+insert into student values(50000000, "Matthew", "Elias", "Biology", "Science", "matthewelias");
+
+insert into attends values(10000000, 6010);
+insert into attends values(10000000, 6011);
+insert into attends values(20000000, 6010);
+insert into attends values(20000000, 6012);
+insert into attends values(30000000, 6010);
+insert into attends values(30000000, 6011);
+insert into attends values(40000000, 6019);
+insert into attends values(50000000, 6019);
+
+insert into likes values(10000000,  "CS", "341");
+insert into likes values(10000000,  "CS", "240");
+insert into likes values(20000000,  "CS", "240");
+insert into likes values(30000000,  "CS", "341");
+insert into likes values(40000000,  "CS", "245");
+insert into likes values(50000000,  "CS", "245");
+
+insert into friends values(50000000, 10000000);
+insert into friends values(50000000, 20000000);
+insert into friends values(50000000, 30000000);
+insert into friends values(50000000, 40000000);
+insert into friends values(20000000, 30000000);
+insert into friends values(20000000, 40000000);
+insert into friends values(30000000, 20000000);
+insert into friends values(30000000, 40000000);
+insert into friends values(40000000, 20000000);
+insert into friends values(40000000, 30000000);
