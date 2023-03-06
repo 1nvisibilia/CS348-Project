@@ -9,7 +9,7 @@ FROM student INNER JOIN (
 	WHERE frienderid = 50000000
 		AND C.id IN (SELECT cid FROM attends WHERE sid = frienderid) 
 		AND C.id IN (SELECT cid FROM attends WHERE sid = friendeeid)) AS T
-ON id = friendeeid
+ON id = friendeeid;
 
 # R7 Feature 2
 # Assume user has searched for 'CS 343'
