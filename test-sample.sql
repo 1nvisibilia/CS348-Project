@@ -37,7 +37,7 @@ and assocnum = 1;
 
 # R9 Feature 4
 # These are only insert, delete, and create trigger statements which have no output
-# We leave the following as examples for insert and delete on components for CS 343
+# We leave the following as examples for insert and delete on attends for CS 343
 INSERT INTO attends
     VALUES (10000000, 6125), (10000000, 6407);
 
