@@ -2,36 +2,14 @@
 
 # Display a user's friends they have added by their id, first and last names
 # Assume userID = 50000000
-SELECT DISTINCT friendeeid, c.id as cid, csub, cnum
-FROM friends, component as c
-WHERE frienderid = 50000000
-AND c.id IN (
-	SELECT cid
-    FROM attends
-    WHERE sid = frienderid
-) AND c.id IN (
-	SELECT cid
-    FROM attends
-    WHERE sid = friendeeid
-);
-
-
-# Display course codes that are attended by both the user and their friend
-# Assume userID = 50000000 and friendID = 40000000
-SELECT DISTINCT cid, csub, cnum
-FROM attends a INNER JOIN component c
-ON cid = c.id
-WHERE cid IN (
-	SELECT cid
-    FROM attends
-    WHERE sid = 40000000
-)
-AND
-cid IN (
-	SELECT cid
-    FROM attends
-    WHERE sid = 50000000
-);
+SELECT friendeeid, first_name, last_name, cid, csub, cnum
+FROM student INNER JOIN (
+	SELECT DISTINCT friendeeid, C.id AS cid, csub, cnum
+	FROM friends, component AS C
+	WHERE frienderid = 50000000
+		AND C.id IN (SELECT cid FROM attends WHERE sid = frienderid) 
+		AND C.id IN (SELECT cid FROM attends WHERE sid = friendeeid)) AS T
+ON id = friendeeid
 
 # R7 Feature 2
 # Assume user has searched for 'CS 348'
