@@ -56,3 +56,6 @@ To start the app, navigate to the ___frontend___ directory. Execute the script:
 `npm run dev`
 
 Navigate to the localhost link that appears in the output. 
+
+## Progress
+For milestone 1, the application implements Feature 2, allowing users to browse through courses offered at the school (based on the sample dataset). Furthermore, there is a partial implementation for feature 1 (finding which course components the user is taking together with each friend) and feature 5 (display a valid weekly schedule involving user specified courses).
