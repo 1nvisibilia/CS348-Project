@@ -26,13 +26,30 @@ app.get('/', (req, res) => {
 });
 
 app.get('/search', async (req, res) => {
+	console.log(req.query);
 	/** req.query:
-	 * {
-			'courseSub': string | null,
-			'courseCode': string | null
-		}
 
-		
+req.query has 10 fields in total, which can all be null
+setup the sql command to add each condition one by one
+
+searchAll implies whether you should concatenate all the conditions with 'and' or 'or'
+
+
+example:
+{
+  courseSub: 'ECE',
+  courseCode: '252',
+  avail: 'Available Only',
+  courseType: 'LAB',
+  courseName: null,
+  credit: '0.5',
+  campusOff: 'UW',
+  building: 'E2',
+  room: '3056',
+  searchAll: 'true'
+}
+
+
 		// sample stub
 		res.json([
 			{ csub: 'CS', cnum: '102' },
