@@ -63,9 +63,44 @@ example:
 		(err, results) => {
 			if (err) throw err;
 			res.send(results)
-	})
+		})
 })
 
+//
+app.get('/friends', async (req, res) => {
+	console.log(req.query.userId);
+
+	// find all friends and their names
+	// stub
+	res.json([
+		{ id: "20000000", first_name: "Henry", last_name: "Guo" },
+		{ id: "30000000", first_name: "Ryan", last_name: "Zhang" },
+		{ id: "40000000", first_name: "Jiadi", last_name: "Tao" },
+		{ id: "50000000", first_name: "Matthew", last_name: "Elias" }
+	]);
+})
+
+app.post('/modifyFriends', async (req, res) => {
+	console.log(req.body);
+	/**
+	 * sample res.body:
+	 * {
+	 *          userId: '10000000',
+				action: 'add',                       // action is either 'add' or 'delete',
+													 // which means adding or removing friend
+				target: '20000000'
+	 * }
+	 */
+
+	// return the new friend list after the add or delete opreration on the database
+
+	res.json([
+		{ id: "20000000", first_name: "Henry", last_name: "Guo" },
+		{ id: "30000000", first_name: "Ryan", last_name: "Zhang" },
+		{ id: "40000000", first_name: "Jiadi", last_name: "Tao" },
+		{ id: "50000000", first_name: "Matthew", last_name: "Elias" }
+	]);
+})
 
 app.listen(port, () => {
 	console.log(`App listening on http://localhost:${port}`);
