@@ -2,18 +2,25 @@ import { useState, useEffect } from 'react';
 import { Paper, Divider, TextField, Button, Typography, List, ListItem, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import 'core-js/actual/array/group';
 
 export default function SearchPanel() {
     const [friends, setFriends] = useState([]);
     const [idValidity, setValid] = useState(true);
     const [newFriendID, setNewFriendID] = useState('');
+    const [sharedCourses, setSharedCourses] = useState([]);
 
     useEffect(() => {
-        axios.get('/friends', { params: { userId: '10000000' } })
-            .then(response => {
-                setFriends(response.data);
-                console.log(friends);
-            })
+        const setup = async () => {
+            const friendsResponse = await axios.get('/friends', { params: { userId: '10000000' } });
+            setFriends(friendsResponse.data);
+
+            const sharedClasses = await axios.get('/sharedClasses', { params: { userId: '10000000' } });
+            setSharedCourses(sharedClasses.data.group(e => `${e.csub} ${e.cnum}`));
+            console.log(sharedClasses.data.group(e => `${e.csub} ${e.cnum}`));
+        };
+
+        setup();
     }, []);
 
     const changeId = (event) => {
@@ -85,7 +92,36 @@ export default function SearchPanel() {
             </div>
             <Divider orientation="vertical" flexItem></Divider>
             <div style={{ flexBasis: '100%' }}>
-                test2
+                Shared Courses
+                {
+                    sharedCourses.length === 0
+                        ?
+                        <Typography variant="caption">
+                            <div style={{ margin: '2em 0' }}>You do not have any courses in common with any of your friends</div>
+                        </Typography>
+                        :
+                        <List>
+                            {
+                                Object.keys(sharedCourses).map(cid => {
+                                    const course = sharedCourses[cid];
+                                    const classmates = course
+                                        .map(e => `${e.first_name} ${e.last_name}`)
+                                        .join(', ');
+
+                                    return (
+                                        <>
+                                            <ListItem key={cid} dense>
+                                                {cid + ': '}
+                                            </ListItem>
+                                            <ListItem style={{ marginBottom: '1em' }} dense key={cid + 'classmates'}>
+                                                <div>taken with {classmates}</div>
+                                            </ListItem>
+                                        </>
+                                    );
+                                })
+                            }
+                        </List>
+                }
             </div>
         </Paper>
     )

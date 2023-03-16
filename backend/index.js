@@ -80,6 +80,20 @@ app.get('/friends', async (req, res) => {
 	]);
 })
 
+app.get('/sharedClasses', async (req, res) => {
+	console.log("sharedClasses ", req.query.userId);
+
+
+	// stub
+	// need first_name, last_name, csub, cnum at the minimum, feel free to return more attributes
+	res.json([
+		{ first_name: "Henry", last_name: "Guo", csub: 'CS', cnum: '102' },
+		{ first_name: "Henry", last_name: "Guo", csub: 'CS', cnum: '104' },
+		{ first_name: "Ryan", last_name: "Zhang", csub: 'CS', cnum: '102' },
+		{ first_name: "Matthew", last_name: "Elias", csub: 'CS', cnum: '222' },
+	]);
+})
+
 app.post('/modifyFriends', async (req, res) => {
 	console.log(req.body);
 	/**
