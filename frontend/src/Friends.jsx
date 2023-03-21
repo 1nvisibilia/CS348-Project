@@ -36,21 +36,27 @@ export default function SearchPanel() {
         }
         const response = await axios.post('/modifyFriends', {
             userId: '10000000',
-            action: 'add',
             target: newFriendID
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-        setFriends(response.data);
+        const friendsResponse = await axios.get('/friends', { params: { userId: '10000000' } });
+        setFriends(friendsResponse.data);
     }
 
     const removeFriend = async (id) => {
         console.log(id)
 
-        const response = await axios.post('/modifyFriends', {
-            userId: '10000000',
-            action: 'remove',
-            target: id
+        const response = await axios.delete('/modifyFriends', {
+            params: {
+                userId: '10000000',
+                target: id
+            }
         });
-        setFriends(response.data);
+        const friendsResponse = await axios.get('/friends', { params: { userId: '10000000' } });
+        setFriends(friendsResponse.data);
     }
 
     return (

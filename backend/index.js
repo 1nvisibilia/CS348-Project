@@ -49,15 +49,6 @@ example:
   searchAll: 'true'
 }
 
-
-		// sample stub
-		res.json([
-			{ csub: 'CS', cnum: '102' },
-			{ csub: 'CS', cnum: '240' },
-			{ csub: 'CS', cnum: '241' },
-			{ csub: 'CS', cnum: '242' },
-			{ csub: 'CS', cnum: '350' }
-		]);
 	 */
 	db.query('SELECT csub, cnum FROM course',
 		(err, results) => {
@@ -68,53 +59,74 @@ example:
 
 //
 app.get('/friends', async (req, res) => {
-	console.log(req.query.userId);
+	const { userId } = req.query
 
-	// find all friends and their names
-	// stub
-	res.json([
-		{ id: "20000000", first_name: "Henry", last_name: "Guo" },
-		{ id: "30000000", first_name: "Ryan", last_name: "Zhang" },
-		{ id: "40000000", first_name: "Jiadi", last_name: "Tao" },
-		{ id: "50000000", first_name: "Matthew", last_name: "Elias" }
-	]);
+	// // find all friends and their names
+	db.query(`
+	SELECT id, first_name, last_name
+	FROM friends INNER JOIN student ON friendeeid=student.id
+	WHERE frienderid = ${userId}`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results)
+		})
 })
 
 app.get('/sharedClasses', async (req, res) => {
-	console.log("sharedClasses ", req.query.userId);
+	const { userId } = req.query
 
-
-	// stub
 	// need first_name, last_name, csub, cnum at the minimum, feel free to return more attributes
-	res.json([
-		{ first_name: "Henry", last_name: "Guo", csub: 'CS', cnum: '102' },
-		{ first_name: "Henry", last_name: "Guo", csub: 'CS', cnum: '104' },
-		{ first_name: "Ryan", last_name: "Zhang", csub: 'CS', cnum: '102' },
-		{ first_name: "Matthew", last_name: "Elias", csub: 'CS', cnum: '222' },
-	]);
+	db.query(`
+		SELECT friendeeid, first_name, last_name, cid, csub, cnum
+		FROM student INNER JOIN (
+			SELECT DISTINCT friendeeid, C.id AS cid, csub, cnum
+			FROM friends, component AS C
+			WHERE frienderid = ${userId}
+				AND C.id IN (SELECT cid FROM attends WHERE sid = frienderid) 
+				AND C.id IN (SELECT cid FROM attends WHERE sid = friendeeid)) AS T
+		ON id = friendeeid`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results)
+		})
 })
 
-app.post('/modifyFriends', async (req, res) => {
-	console.log(req.body);
+app.delete('/modifyFriends', async (req, res) => {
+	const { userId, target } = req.query
 	/**
-	 * sample res.body:
+	 * sample req.query:
 	 * {
 	 *          userId: '10000000',
-				action: 'add',                       // action is either 'add' or 'delete',
-													 // which means adding or removing friend
 				target: '20000000'
 	 * }
 	 */
 
-	// return the new friend list after the add or delete opreration on the database
-
-	res.json([
-		{ id: "20000000", first_name: "Henry", last_name: "Guo" },
-		{ id: "30000000", first_name: "Ryan", last_name: "Zhang" },
-		{ id: "40000000", first_name: "Jiadi", last_name: "Tao" },
-		{ id: "50000000", first_name: "Matthew", last_name: "Elias" }
-	]);
+	db.query(`
+	DELETE FROM friends
+	WHERE frienderid = ${userId} AND friendeeid = ${target}`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results)
+		})
 })
+
+
+app.post('/modifyFriends', async (req, res) => {
+	const { userId, target } = req.body
+	/**
+	 * sample req.body:
+	 * {
+	 *          userId: '10000000',
+				target: '20000000'
+	 * }
+	 */
+	db.query(`INSERT IGNORE INTO friends VALUES(${userId}, ${target})`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results)
+		})
+})
+
 
 app.listen(port, () => {
 	console.log(`App listening on http://localhost:${port}`);
