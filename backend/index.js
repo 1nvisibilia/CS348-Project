@@ -26,31 +26,58 @@ app.get('/', (req, res) => {
 });
 
 app.get('/search', async (req, res) => {
-	console.log(req.query);
 	/** req.query:
 
-req.query has 10 fields in total, which can all be null
-setup the sql command to add each condition one by one
+		req.query has 10 fields in total, which can all be null
+		setup the sql command to add each condition one by one
 
-searchAll implies whether you should concatenate all the conditions with 'and' or 'or'
+		searchAll implies whether you should concatenate all the conditions with 'and' or 'or'
 
 
-example:
-{
-  courseSub: 'ECE',
-  courseCode: '252',
-  avail: 'Available Only',
-  courseType: 'LAB',
-  courseName: null,
-  credit: '0.5',
-  campusOff: 'UW',
-  building: 'E2',
-  room: '3056',
-  searchAll: 'true'
-}
+		example:
+		{
+		courseSub: 'ECE',
+		courseCode: '252',
+		avail: 'Available Only',
+		courseType: 'LAB',
+		courseName: null,
+		credit: '0.5',
+		campusOff: 'UW',
+		building: 'E2',
+		room: '3056',
+		searchAll: 'true'
+		}
 
 	 */
-	db.query('SELECT csub, cnum FROM course',
+	
+	const attrMapper = {
+		'courseSub': 'csub',
+		'courseCode': 'cnum',
+		'courseType': 'ctype',
+		'courseName': 'title',
+		'campusOff' : 'campoff',
+	}
+
+	const concatenator = req.query.searchAll === 'true' ? ' OR ' : ' AND '
+	const whereClause = Object.entries(req.query)
+		.map(([attribute, value]) => {
+			if (attribute === 'searchAll') {
+				return undefined
+			} else if (attribute === 'courseName') {
+				return `${attrMapper[attribute]} LIKE '%${value}%'` 
+			} else if (attribute === 'avail') {
+				return 'enrolltot < enrollcap'
+			}
+			return `${attrMapper[attribute] || attribute} = '${value}'`
+		})
+		.filter(e => e !== undefined)
+		.join(concatenator)
+
+	db.query(`
+		SELECT *
+		FROM component NATURAL JOIN course
+		${whereClause && 'WHERE '.concat(whereClause)}
+	`,
 		(err, results) => {
 			if (err) throw err;
 			res.send(results)
