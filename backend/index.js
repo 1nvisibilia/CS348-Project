@@ -25,6 +25,18 @@ app.get('/', (req, res) => {
 	res.send('CS348!!!!');
 });
 
+app.get('/login', (req, res) => {
+	console.log(req.query)
+	// req.query contains, for example: { userName: 'j63tao', userpw: 'secretpw' }
+
+	/**
+	 * check DB if userName exists, if so check if pw matches. return true if info are correct,
+	 * false otherwise
+	 */
+
+	res.json(true); // stub
+})
+
 app.get('/search', async (req, res) => {
 	/** req.query:
 

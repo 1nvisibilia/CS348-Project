@@ -4,7 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import 'core-js/actual/array/group';
 
-export default function SearchPanel() {
+export default function SearchPanel({ user }) {
+    // user is a userid string
     const [friends, setFriends] = useState([]);
     const [idValidity, setValid] = useState(true);
     const [newFriendID, setNewFriendID] = useState('');

@@ -41,7 +41,7 @@ function a11yProps(index) {
     };
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({ user }) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -58,13 +58,13 @@ export default function BasicTabs() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <SearchPanel></SearchPanel>
+                <SearchPanel user={user}></SearchPanel>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Schedule></Schedule>
+                <Schedule user={user}></Schedule>
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <Friends></Friends>
+                <Friends user={user}></Friends>
             </TabPanel>
         </Box>
     );
