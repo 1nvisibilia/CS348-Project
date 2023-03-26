@@ -145,9 +145,9 @@ app.get('/sharedClasses', async (req, res) => {
 
 	// need first_name, last_name, csub, cnum at the minimum, feel free to return more attributes
 	db.query(`
-		SELECT friendeeid, first_name, last_name, cid, csub, cnum
+		SELECT friendeeid, first_name, last_name, cid, csub, cnum, ctype, secnum
 		FROM student INNER JOIN (
-			SELECT DISTINCT friendeeid, C.id AS cid, csub, cnum
+			SELECT DISTINCT friendeeid, C.id AS cid, csub, cnum, ctype, secnum
 			FROM friends, component AS C
 			WHERE frienderid = ${userId}
 				AND C.id IN (SELECT cid FROM attends WHERE sid = frienderid) 

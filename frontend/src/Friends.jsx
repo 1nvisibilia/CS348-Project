@@ -11,16 +11,15 @@ export default function SearchPanel({ user }) {
     const [newFriendID, setNewFriendID] = useState('');
     const [sharedCourses, setSharedCourses] = useState([]);
 
+    const setup = async () => {
+        const friendsResponse = await axios.get('/friends', { params: { userId: user } });
+        setFriends(friendsResponse.data);
+
+        const sharedClasses = await axios.get('/sharedClasses', { params: { userId: user } });
+        setSharedCourses(sharedClasses.data.group(e => `${e.csub} ${e.cnum} (${e.ctype}-${e.secnum})`));
+    };
+
     useEffect(() => {
-        const setup = async () => {
-            const friendsResponse = await axios.get('/friends', { params: { userId: '10000000' } });
-            setFriends(friendsResponse.data);
-
-            const sharedClasses = await axios.get('/sharedClasses', { params: { userId: '10000000' } });
-            setSharedCourses(sharedClasses.data.group(e => `${e.csub} ${e.cnum}`));
-            console.log(sharedClasses.data.group(e => `${e.csub} ${e.cnum}`));
-        };
-
         setup();
     }, []);
 
@@ -37,15 +36,14 @@ export default function SearchPanel({ user }) {
             return;
         }
         const response = await axios.post('/modifyFriends', {
-            userId: '10000000',
+            userId: user,
             target: newFriendID
         }, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        const friendsResponse = await axios.get('/friends', { params: { userId: '10000000' } });
-        setFriends(friendsResponse.data);
+        setup();
     }
 
     const removeFriend = async (id) => {
@@ -53,12 +51,11 @@ export default function SearchPanel({ user }) {
 
         const response = await axios.delete('/modifyFriends', {
             params: {
-                userId: '10000000',
+                userId: user,
                 target: id
             }
         });
-        const friendsResponse = await axios.get('/friends', { params: { userId: '10000000' } });
-        setFriends(friendsResponse.data);
+        setup();
     }
 
     return (

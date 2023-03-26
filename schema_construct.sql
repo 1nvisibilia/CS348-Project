@@ -15,6 +15,7 @@ pword varchar(20));
 create table friends
 (frienderid char(8),
 friendeeid char(8),
+unique key (frienderid, friendeeid)
 foreign key (frienderid)
 references Student (id)
 on delete cascade,
