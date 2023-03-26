@@ -34,7 +34,7 @@ app.get('/login', (req, res) => {
 	 * false otherwise
 	 */
 
-	res.json(true); // stub
+	res.send(true); // stub
 })
 
 app.get('/search', async (req, res) => {
@@ -166,6 +166,23 @@ app.post('/modifyFriends', async (req, res) => {
 		})
 })
 
+app.post('/addcourse', (req, res) => {
+	console.log(req.body);
+	// req.body:
+	/**
+	 * user, the 8 digit id
+	 * addMethod, either 'add' or 'report'
+	 * componentID: the component ID
+	 * 
+	 * for 'report' method, simple check against user's existing schedule to make sure no conflict
+	 * for 'add' method, check against user's existing schedule but also capacity of the component
+	 * 
+	 * 
+	 * return true for successful addition of the course, or a string that indicate failing reason:
+	 */
+	res.send(true); // stub
+	// res.send('Component is at full Capacity'); // sample failure
+})
 
 app.listen(port, () => {
 	console.log(`App listening on http://localhost:${port}`);

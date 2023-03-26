@@ -7,7 +7,7 @@ const courseSubs = [
     'Any', 'CS', 'ECE', 'MATH', 'AMATH', 'PMATH', 'SE', 'STAT', 'CO', 'A', 'B', 'Bf', '3B', 'D1', '34B'
 ];
 
-export default function SearchPanel() {
+export default function SearchPanel({ user }) {
     // main queries
     const [courseSub, setCourseSub] = useState('Any');
     const [courseCode, setCourseCode] = useState('');
@@ -191,7 +191,7 @@ export default function SearchPanel() {
 
             {
                 (queryResult && (typeof queryResult === 'object'))
-                    ? <ResultTable queryResult={queryResult}></ResultTable> : <></>
+                    ? <ResultTable user={user} queryResult={queryResult}></ResultTable> : <></>
             }
         </Paper>
     );
