@@ -111,6 +111,24 @@ app.get('/friends', async (req, res) => {
 		})
 })
 
+app.get('/schedule', async (req, res) => {
+	const { userId } = req.query
+	
+	db.query(`
+		SELECT *
+		FROM component
+		WHERE id in (
+			SELECT cid
+			FROM attends
+			WHERE sid = ${userId}
+		)`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results)
+		}
+	)
+})
+
 app.get('/sharedClasses', async (req, res) => {
 	const { userId } = req.query
 

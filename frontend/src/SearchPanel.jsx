@@ -191,7 +191,7 @@ export default function SearchPanel({ user }) {
 
             {
                 (queryResult && (typeof queryResult === 'object'))
-                    ? <ResultTable user={user} queryResult={queryResult}></ResultTable> : <></>
+                    ? <ResultTable user={user} queryResult={queryResult} actionsEnabled={true}></ResultTable> : <></>
             }
         </Paper>
     );
