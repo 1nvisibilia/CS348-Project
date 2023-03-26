@@ -7,6 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete'
 import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -14,7 +15,7 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import { useState } from 'react';
 
-export default function ResultTable({ user, queryResult, actionsEnabled }) {
+export default function ResultTable({ user, queryResult, deleteEnabled, onChange }) {
     const [open, setSnackbar] = useState(false);
     const [snackMsg, setMsg] = useState('');
 
@@ -30,7 +31,7 @@ export default function ResultTable({ user, queryResult, actionsEnabled }) {
 
     const addCourse = async (addMethod, componentID) => {
         console.log(user, addMethod, componentID);
-        const response = await axios.post('/addcourse', {
+        const response = await axios.post('/modifyCourse', {
             user, addMethod, componentID
         });
 
@@ -40,6 +41,44 @@ export default function ResultTable({ user, queryResult, actionsEnabled }) {
             setMsg(response.data);
         }
         setSnackbar(true);
+    }
+
+    const removeCourse = async (componentID) => {
+        const response = await axios.delete('/modifyCourse', {
+            params: {
+                userId: '10000000',
+                target: componentID
+            }
+        })
+
+        const courseResponse = await axios.get('/schedule', { params: { userId: '10000000' } });
+        onChange(courseResponse.data)
+    }
+
+    const renderActions = (id) => {
+        if (deleteEnabled) {
+            return (
+                <IconButton onClick={() => removeCourse(id)}>
+                    <Tooltip title='Remove Component' placement='top'>
+                        <DeleteIcon />
+                    </Tooltip>
+                </IconButton>
+            )
+        }
+        return (
+            <>
+                <IconButton onClick={() => addCourse('add', id)}>
+                    <Tooltip title="Add Component" placement="top">
+                        <AddIcon></AddIcon>
+                    </Tooltip>
+                </IconButton>
+                <IconButton onClick={() => addCourse('report', id)}>
+                    <Tooltip title="Report Component" placement="top">
+                        <InfoIcon></InfoIcon>
+                    </Tooltip>
+                </IconButton>
+            </>
+        )
     }
 
     return (
@@ -52,7 +91,7 @@ export default function ResultTable({ user, queryResult, actionsEnabled }) {
             />
             <div style={{ margin: '2em 0' }}>
                 <Typography variant="overline">
-                    {actionsEnabled ? <span>{queryResult.length} results found:</span> : <span>Your Schedule:</span>}
+                    {!deleteEnabled ? <span>{queryResult.length} results found:</span> : <span>Your Schedule:</span>}
                 </Typography>
             </div>
             <TableContainer component={Paper} variant='outlined'>
@@ -64,7 +103,7 @@ export default function ResultTable({ user, queryResult, actionsEnabled }) {
                             <TableCell align="right">Type</TableCell>
                             <TableCell align="right">Location</TableCell>
                             <TableCell align="right">Capacity</TableCell>
-                            {actionsEnabled && <TableCell align="right">Actions</TableCell>}
+                            <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -80,20 +119,9 @@ export default function ResultTable({ user, queryResult, actionsEnabled }) {
                                     {row.campoff || ''}{row.camploc ? `(${row.camploc})` : ''} {row.building || 'N/A'}{row.room || ''}
                                 </TableCell>
                                 <TableCell align="right">{row.enrolltot}/{row.enrollcap}</TableCell>
-                                {actionsEnabled && 
                                     <TableCell align="right">
-                                        <IconButton onClick={() => addCourse('add', row.id)}>
-                                            <Tooltip title="Add Component" placement="top">
-                                                <AddIcon></AddIcon>
-                                            </Tooltip>
-                                        </IconButton>
-                                        <IconButton onClick={() => addCourse('report', row.id)}>
-                                            <Tooltip title="Report Component" placement="top">
-                                                <InfoIcon></InfoIcon>
-                                            </Tooltip>
-                                        </IconButton>
+                                        {renderActions(row.id)}
                                     </TableCell>
-                                }
                             </TableRow>
                         ))}
                     </TableBody>

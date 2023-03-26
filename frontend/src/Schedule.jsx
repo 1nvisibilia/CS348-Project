@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import ResultTable from './ResultTable';
 
 export default function Schedule({ user }) {
     const [result, setResult] = useState(null)
+
+    const handleChange = useCallback((val) => {
+        setResult(val)
+    })
 
     useEffect(() => {
         const querySchedule = async () => {
@@ -20,10 +24,10 @@ export default function Schedule({ user }) {
         }
 
         querySchedule()
-    }, [result])
+    }, [])
 
     const render = () => {
-        if (result) return <ResultTable user={user} queryResult={result} actionsEnabled={false} />
+        if (result) return <ResultTable onChange={handleChange} user={user} queryResult={result} deleteEnabled={true} />
         return <div>You are not enrolled in any courses</div>
     }
 

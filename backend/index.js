@@ -218,7 +218,23 @@ app.post('/modifyFriends', async (req, res) => {
 		})
 })
 
-app.post('/addcourse', (req, res) => {
+app.delete('/modifyCourse', (req, res) => {
+	console.log(req)
+	// Need logic to delete target from attends table
+	// target = componentID to be deleted
+	/**
+	 * sample req.body:
+	 * {
+	 *          userId: '10000000',
+				target: '20000000'
+	 * }
+	 */
+	res.send(true)
+})
+
+app.post('/modifyCourse', (req, res) => {
+	console.log(req.body);
+	// req.body:
 	/**
 	 * req.body:
 	 * user, the 8 digit id
