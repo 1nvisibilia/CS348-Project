@@ -6,8 +6,8 @@ use MySchedule;
 
 create table Student
 (id char(8) primary key,
-first_name varchar(20),
-last_name varchar(20),
+first_name varchar(25),
+last_name varchar(25),
 program varchar(20),
 faculty varchar(20),
 pword varchar(20));
@@ -24,7 +24,7 @@ on delete cascade);
 
 create table Course
 (csub varchar(6),
-cnum varchar(4),
+cnum varchar(5),
 credit numeric(3,2),
 title varchar(30),
 index num_ind (cnum),
@@ -33,15 +33,15 @@ primary key (csub, cnum));
 
 create table Professor
 (id char(8) primary key,
-first_name varchar(20),
-last_name varchar(20),
+first_name varchar(25),
+last_name varchar(25),
 on_break bit,
 pword varchar(20));
 
 create table Likes
 (sid char(8),
 csub varchar(6),
-cnum varchar(4),
+cnum varchar(5),
 foreign key (sid) 
 references student (id) 
 on delete cascade,
@@ -56,7 +56,7 @@ primary key (sid, csub, cnum));
 create table Component
 (id varchar(5) primary key,
 csub varchar(6),
-cnum varchar(4),
+cnum varchar(5),
 foreign key (csub)
 references course (csub)
 on delete cascade,
@@ -76,7 +76,7 @@ starttime time,
 endtime time,
 weekday varchar(2),
 building varchar(6),
-room varchar(4),
+room varchar(5),
 pid char(8),
 foreign key (pid)
 references professor (id)
