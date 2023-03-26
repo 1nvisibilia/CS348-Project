@@ -29,6 +29,7 @@ export default function SearchPanel({ user }) {
         setNewFriendID(event.target.value);
     }
 
+    // Once userId is stored, add case for user adding themself
     const addFriend = async () => {
         console.log(newFriendID);
         if (!newFriendID || newFriendID.length !== 8) {

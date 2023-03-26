@@ -13,7 +13,7 @@ export default function Schedule({ user }) {
                         userId: '10000000'
                     }
                 })
-                setResult(scheduleResponse.data ?? [])
+                setResult(scheduleResponse?.data)
             } catch (err) {
                 console.log(err.response)
             }
