@@ -1,19 +1,27 @@
 import bs4 as bs
 import requests
+import re
 
 #THIS SCRIPT DOES NOT DIRECTLY GENERATE INSERT_DATA.SQL, ITS OUTPUT SHOULD BE FURTHER CLEANED BY HAND
 
-coursenums = ["100",  "105",  "106",  "114",  "115",  "116",  "135",  "136",  "136L",  "138",  "146",  "200",  "230",  "240",  "240E",  "241",  "245",  "246",  "251",  "330",  "335",  "338",  "341",  "343",  "346", 
- "348",  "349",  "350",  "360",  "365",  "370",  "371",  "430",  "431",  "436",  "442",  "444",  "445",  "446",  "447",  "448",  "450",  "451",  "452",  "454",  "456",  "458",  "467",  "476",  "479",  
-"480",  "482",  "484",  "486",  "487",  "488",  "489",  "490",  "492",  "494",  "497",  "499R",  "499T"]
-#coursenums=["348"]
+
+#coursenums = ["100",  "105",  "106",  "114",  "115",  "116",  "135",  "136", "136L",  "138",  "146",  "200",  "230",  "240",  "240E",  "241",  "245",  "246",  "251",  "330",  "335",  "338",  "341",  "343",  "346", 
+# "348",  "349",  "350",  "360",  "365",  "370",  "371",  "430",  "431",  "436",  "442",  "444",  "445",  "446",  "447",  "448",  "450",  "451",  "452",  "454",  "456",  "458",  "467",  "476",  "479",  
+#"480",  "482",  "484",  "486",  "487",  "488",  "489",  "490",  "492",  "494",  "497",  "499R",  "499T"]
+#coursenums=["136", "136L"]
+coursenums=["106"]
+#ensures the all 136L type courses come first, since 136 query will also return 136L results
+coursenums.sort(key=len, reverse=True)
 
 teachers=set()
 teachPairs=set()
 counter=10000000
 
+compCodeSet=set()
+
 for num in coursenums:
-    URL = "https://classes.uwaterloo.ca/cgi-bin/cgiwrap/infocour/salook.pl?sess=1231&level=under&subject=CS&cournum="+num
+    #URL = "https://classes.uwaterloo.ca/cgi-bin/cgiwrap/infocour/salook.pl?sess=1231&level=under&subject=CS&cournum="+num
+    URL = "https://classes.uwaterloo.ca/cgi-bin/cgiwrap/infocour/salook.pl?sess=1231&level=under&subject=ECE&cournum="+num
     url_link = requests.get(URL)
 
     file = bs.BeautifulSoup(url_link.text, "lxml")
@@ -24,11 +32,16 @@ for num in coursenums:
     courseInfo = []
     components=[]
 
+    courseInfoFound = False
+
     for i in rows:
         table_data = i.find_all('td')
         data = [j.text for j in table_data]
-        if len(data) > 0 and data[0].strip()=="CS":
+        if len(data) > 0 and data[0].strip()=="ECE" and not courseInfoFound:
             courseInfo = [k.strip() for k in data]
+            courseInfoFound = True
+            #only gets the first course, fixes 136-136L issue
+
             #for k in data:
             #    print(k.strip(), end=" ")
             #print("\n")
@@ -47,6 +60,13 @@ for num in coursenums:
             print(");")
     
     for comp in components:
+        #testing if comp code is unique, if not skip
+        if comp[0] in compCodeSet:
+            continue
+            #just skip this component, it's already inserted
+        else:
+            compCodeSet.add(comp[0])
+
         #setting up teacher
         teachid = 0
         if len(comp) >= 13 and comp[12] != "":
@@ -67,8 +87,6 @@ for num in coursenums:
                     if p[0] == comp[12]:
                         teachid = p[1]
 
-
-
         print("insert into component values (", end=" ")
 
         print(comp[0]+", ", end=" ")#id
@@ -85,8 +103,14 @@ for num in coursenums:
         print(comp[7]+", ", end=" ")#enrolltot
 
         #not parsing start and end date for now
-        print("NULL, ", end=" ")#startdate
-        print("NULL, ", end=" ")#enddate
+        #dates format:03/06-03/06
+        dates = re.findall(r'[0123][0123456789]/[0123][0123456789]',comp[10])
+        if len(dates) == 2:
+            print("\'2023-"+dates[0][0:1]+"-"+dates[0][3:4]+"\', ", end=" ")#startdate
+            print("\'2023-"+dates[1][0:1]+"-"+dates[1][3:4]+"\', ", end=" ")#enddate
+        else:
+            print("NULL, ", end=" ")#startdate
+            print("NULL, ", end=" ")#enddate
 
         if comp[10]=="":
             print("NULL, ", end=" ")#starttime
@@ -99,6 +123,7 @@ for num in coursenums:
             print("\""+timeend+"\", ", end=" ")#endtime
 
             #only parsing one day for multidays
+            #use regex to parse all weekdays
             weekday = comp[10][11]
             if len(comp[10])>=13 and comp[10][12]=='h':
                 weekday+=comp[10][12]

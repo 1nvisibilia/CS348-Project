@@ -54,7 +54,7 @@ on delete cascade,
 primary key (sid, csub, cnum));
 
 create table Component
-(id varchar(4) primary key,
+(id varchar(5) primary key,
 csub varchar(6),
 cnum varchar(4),
 foreign key (csub)
