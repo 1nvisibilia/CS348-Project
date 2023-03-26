@@ -219,6 +219,7 @@ app.post('/modifyFriends', async (req, res) => {
 })
 
 app.delete('/modifyCourse', (req, res) => {
+	const { userId, target } = req.query
 	console.log(req)
 	// Need logic to delete target from attends table
 	// target = componentID to be deleted
@@ -229,11 +230,26 @@ app.delete('/modifyCourse', (req, res) => {
 				target: '20000000'
 	 * }
 	 */
-	res.send(true)
+	db.query(`
+	DELETE FROM attends
+	WHERE sid = ${userId} and cid = ${target}`,
+	(err, results) => {
+		if (err) throw err
+		res.send(results)
+	})
 })
 
 app.post('/modifyCourse', (req, res) => {
-	console.log(req.body);
+	const { user, addMethod, componentID} = req.body
+
+	if (addMethod == 'add') {
+		db.query(`
+		INSERT INTO attends VALUES(${user}, ${componentID})`,
+		(err, results) => {
+			if (err) console.log(err)
+			res.send(true)
+		})
+	}
 	// req.body:
 	/**
 	 * req.body:
@@ -247,7 +263,7 @@ app.post('/modifyCourse', (req, res) => {
 	 * return true for successful addition of the course, or a string that indicate failing reason:
 	 */
 	
-	res.send(true) // stub
+	// res.send(true) // stub
 })
 
 app.listen(port, () => {

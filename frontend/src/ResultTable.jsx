@@ -23,7 +23,7 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
         return (
             <div style={{ margin: '8em 0' }}>
                 <Typography variant="subtitle1">
-                    <span>We did not find any results matching the criteria...</span>
+                    {deleteEnabled ? <span>You are not enrolled in any courses</span> : <span>We did not find any results matching the criteria...</span>}
                 </Typography>
             </div>
         );
