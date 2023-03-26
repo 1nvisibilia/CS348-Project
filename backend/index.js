@@ -26,15 +26,26 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-	console.log(req.query)
 	// req.query contains, for example: { userName: 'j63tao', userpw: 'secretpw' }
 
 	/**
 	 * check DB if userName exists, if so check if pw matches. return true if info are correct,
 	 * false otherwise
 	 */
+	userID = parseInt(req.query.userName, 10);
+	if(isNaN(userID)) {
+		throw new Error("ID not valid.");
+	}
 
-	res.send(true); // stub
+	db.query(`
+		SELECT id, pword
+		FROM Student
+		WHERE id=${userID} AND pword='${req.query.userpw}'
+	`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results.length > 0);
+		})	
 })
 
 app.get('/search', async (req, res) => {
@@ -130,6 +141,29 @@ app.get('/sharedClasses', async (req, res) => {
 		})
 })
 
+app.get('/popular', (req, res) => {
+	// req.query doesn't contain any parameters
+
+	/**
+	 * Need csub, cnum, totEnroll, totCap, likes, popularity
+	 */
+
+	db.query(`
+	SELECT *, totEnroll + likes AS popularity
+	FROM 
+		(SELECT csub, cnum, SUM(enrollTot) AS totEnroll, SUM(enrollCap) AS totalCap, likes
+    	FROM
+    		(SELECT csub, cnum, COUNT(SID) AS likes
+          	FROM Likes
+          	GROUP BY csub, cnum ) AS T1 NATURAL JOIN Component
+    GROUP BY csub, cnum) AS T2
+	ORDER BY popularity DESC`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(results);
+		})	
+})
+
 app.delete('/modifyFriends', async (req, res) => {
 	const { userId, target } = req.query
 	/**
@@ -167,9 +201,8 @@ app.post('/modifyFriends', async (req, res) => {
 })
 
 app.post('/addcourse', (req, res) => {
-	console.log(req.body);
-	// req.body:
 	/**
+	 * req.body:
 	 * user, the 8 digit id
 	 * addMethod, either 'add' or 'report'
 	 * componentID: the component ID
@@ -177,11 +210,10 @@ app.post('/addcourse', (req, res) => {
 	 * for 'report' method, simple check against user's existing schedule to make sure no conflict
 	 * for 'add' method, check against user's existing schedule but also capacity of the component
 	 * 
-	 * 
 	 * return true for successful addition of the course, or a string that indicate failing reason:
 	 */
-	res.send(true); // stub
-	// res.send('Component is at full Capacity'); // sample failure
+	
+	res.send(true) // stub
 })
 
 app.listen(port, () => {
