@@ -35,12 +35,15 @@ for query in lines:
     try:
         cursor.execute(query)
         print(query)
-    except:
+    except mysql.connector.Error as err:
         # Print to stderr so output redirection works properly
         print("stderr: failed: {}".format(query), file=sys.stderr)
+        print("stderr: reason: {}\n".format(err), file=sys.stderr)
         failCount += 1
 
 print("stderr: total invalid SQL queries: {}".format(failCount), file=sys.stderr)
 
 # Don't actually commit anything
 cnx.rollback()
+cursor.close()
+cnx.close()

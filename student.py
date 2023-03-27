@@ -98,5 +98,5 @@ print("insert into attends values" + ',\n'.join(['({},{})'.format(sid, cid) for 
 
 # Don't actually commit anything
 cnx.rollback()
-        
-
+cursor.close()
+cnx.close()
