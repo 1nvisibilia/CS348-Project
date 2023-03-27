@@ -46,12 +46,12 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
     const removeCourse = async (componentID) => {
         const response = await axios.delete('/modifyCourse', {
             params: {
-                userId: '10000000',
+                userId: user,
                 target: componentID
             }
         })
 
-        const courseResponse = await axios.get('/schedule', { params: { userId: '10000000' } });
+        const courseResponse = await axios.get('/schedule', { params: { userId: user } });
         onChange(courseResponse.data)
     }
 
@@ -87,7 +87,7 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
                 open={open}
                 autoHideDuration={2000}
                 message={snackMsg}
-                onClose={() =>setSnackbar(false)}
+                onClose={() => setSnackbar(false)}
             />
             <div style={{ margin: '2em 0' }}>
                 <Typography variant="overline">
@@ -103,6 +103,7 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
                             <TableCell align="right">Type</TableCell>
                             <TableCell align="right">Location</TableCell>
                             <TableCell align="right">Capacity</TableCell>
+                            <TableCell align="right">Time</TableCell>
                             <TableCell align="right">Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -119,9 +120,16 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
                                     {row.campoff || ''}{row.camploc ? `(${row.camploc})` : ''} {row.building || 'N/A'}{row.room || ''}
                                 </TableCell>
                                 <TableCell align="right">{row.enrolltot}/{row.enrollcap}</TableCell>
-                                    <TableCell align="right">
-                                        {renderActions(row.id)}
-                                    </TableCell>
+                                <TableCell align="right">
+                                    {
+                                        row.weekday && row.starttime && row.endtime
+                                            ? row.weekday + " " + row.starttime.slice(0, -3) + "-" + row.endtime.slice(0, -3)
+                                            : <Tooltip title='This component does not have in-person activities' placement='top'><span>N/A</span></Tooltip>
+                                    }
+                                </TableCell>
+                                <TableCell align="right">
+                                    {renderActions(row.id)}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
