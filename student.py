@@ -55,7 +55,7 @@ def make_insert_attends(student_id, component_id):
 
 
 # Create the students
-print('USE MySchedule;')
+print('use myschedule;')
 
 START_STUDENT_ID = 10000001
 # The first 5 students were generated manually (sample data)
