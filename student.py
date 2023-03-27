@@ -1,6 +1,7 @@
 import mysql.connector
 import random
 from faker import Faker
+import sys
 
 # Ensure the result of randomizations is always the same
 seed = 1510
@@ -15,6 +16,7 @@ cnx = mysql.connector.connect(
 	database='myschedule',
 	port=3306
 )
+cursor = cnx.cursor()
 
 def make_insert_student(student_id):
     first, last = fake.first_name(), fake.last_name()
@@ -37,6 +39,17 @@ def make_friendships(friendships, start_sid, end_sid):
             if (frienderid != friendeeid):
                 friendships.append((frienderid, friendeeid))
 
+def make_likes(likes, csub, cnum, start_sid, end_sid):
+    # random.randint() follows a uniform distribution
+    # Make high values of likes a rarer occurence by adjusting the mean like count to be close to 0
+    num_likers = random.randint(-100, 100)
+    if num_likers > 0:
+        # Sample without duplicates
+        likers = random.sample(range(start_sid, end_sid), k=num_likers)
+        for sid in likers:
+            # Protect these statements from failing
+            likes.append((sid, csub, cnum)) 
+
 def make_insert_attends(student_id, component_id):
     return "insert into attends values({}, {});".format(student_id, component_id)
 
@@ -47,8 +60,10 @@ print('USE MySchedule;')
 START_STUDENT_ID = 10000001
 # The first 5 students were generated manually (sample data)
 student_id = START_STUDENT_ID + 5
-for i in range(20000):
-    print(make_insert_student(student_id))
+for i in range(10000):
+    query = make_insert_student(student_id) 
+    cursor.execute(query)
+    print(query)
     student_id += 1
 END_STUDENT_ID = student_id
 
@@ -60,7 +75,6 @@ make_friendships(friendships, START_STUDENT_ID, END_STUDENT_ID)
 
 # Enroll students in classes
 query = 'SELECT id, enrollTot FROM component'
-cursor = cnx.cursor()
 cursor.execute(query)
 results = cursor.fetchall()
 
@@ -82,19 +96,33 @@ for row in results:
                 cursor.execute(insert_student)
                 print(insert_student)
             make_friendships(friendships, old_end, END_STUDENT_ID)
+            print("stderr: student count is now {}, enrollments so far is {}".format(END_STUDENT_ID - START_STUDENT_ID, len(enrollments)), file=sys.stderr)
 
         # Attempt the insert on a random student
         # This will fail if the added component interferes with an existing component of the student's schedule
+        sid = random.randint(START_STUDENT_ID, END_STUDENT_ID)
+        query = make_insert_attends(sid, cid)
         try:
-            sid = random.randint(START_STUDENT_ID, END_STUDENT_ID)
-            cursor.execute(make_insert_attends(sid, cid))
+            cursor.execute(query)
             enrollments.append((sid, cid))
             successfulInserts += 1
-        except:
+        except mysql.connector.Error as err:
             pass
 
+
+# Generate likes relations
+query = 'SELECT DISTINCT csub, cnum FROM course'
+cursor.execute(query)
+results = cursor.fetchall()
+likes = []
+for row in results:
+    csub, cnum = row
+    make_likes(likes, csub, cnum, START_STUDENT_ID, END_STUDENT_ID)
+
+
 print("insert into friends values" + ',\n'.join(['({},{})'.format(friender, friendee) for friender, friendee in friendships]) + ';')
-print("insert into attends values" + ',\n'.join(['({},{})'.format(sid, cid) for sid, cid in enrollments]) + ';')
+print("insert into attends values" + ',\n'.join(['({},"{}")'.format(sid, cid) for sid, cid in enrollments]) + ';')
+print("insert into likes values" + ',\n'.join(['({},"{}","{}")'.format(sid, csub, cnum) for sid, csub, cnum in likes]) + ';')
 
 # Don't actually commit anything
 cnx.rollback()
