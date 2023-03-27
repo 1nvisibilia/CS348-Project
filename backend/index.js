@@ -245,17 +245,6 @@ app.delete('/modifyCourse', (req, res) => {
 })
 
 app.post('/modifyCourse', (req, res) => {
-	const { user, addMethod, componentID} = req.body
-
-	if (addMethod == 'add') {
-		db.query(`
-		INSERT INTO attends VALUES(${user}, ${componentID})`,
-		(err, results) => {
-			if (err) console.log(err)
-			res.send(true)
-		})
-	}
-	// req.body:
 	/**
 	 * req.body:
 	 * user, the 8 digit id
@@ -267,8 +256,30 @@ app.post('/modifyCourse', (req, res) => {
 	 * 
 	 * return true for successful addition of the course, or a string that indicate failing reason:
 	 */
-	
-	// res.send(true) // stub
+	const { user, addMethod, componentID} = req.body
+
+	if (addMethod == 'add') {
+		db.query(`
+		INSERT INTO attends VALUES(${user}, ${componentID});
+		`,
+		(err, results) => {
+			if (err) throw err;
+			res.send(true);
+		})
+	} else if (addMethod == 'report') {
+		db.query(`
+		SELECT *
+		FROM Attends
+		WHERE sid=${user} AND cid=${componentID}
+		`,
+		(err, results) => {
+			if(err) throw err;
+			res.send(results.length > 0);
+		}
+		)
+	} else {
+		throw new Error("Invalid add method.");
+	}
 })
 
 app.listen(port, () => {
