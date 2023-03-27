@@ -167,7 +167,7 @@ BEGIN
             curCompIds AS (SELECT * FROM Attends WHERE Attends.sid = NEW.sid),
             curComps AS (SELECT *
 						FROM Component
-                        JOIN curCompIds ON curCompIds.cid = Component.cid)
+                        JOIN curCompIds ON curCompIds.cid = Component.id)
 		SELECT *
         FROM curComps
         WHERE ((curComps.startdate <= newComp.enddate AND curComps.enddate >= newComp.startdate) 
@@ -194,7 +194,7 @@ BEGIN
             curCompIds AS (SELECT * FROM Attends WHERE Attends.sid = NEW.sid),
             curComps AS (SELECT *
 						FROM Component
-                        JOIN curCompIds ON curCompIds.cid = Component.cid)
+                        JOIN curCompIds ON curCompIds.cid = Component.id)
 		SELECT *
         FROM curComps
         WHERE ((curComps.startdate <= newComp.enddate AND curComps.enddate >= newComp.startdate) 
