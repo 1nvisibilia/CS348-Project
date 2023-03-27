@@ -8504,3 +8504,37 @@ insert into component values ( 7724,  "WKRPT",  "400",  "PRJ",  "004",  "UW",  "
 insert into component values ( 7739,  "WKRPT",  "400",  "PRJ",  "005",  "UW",  "U",  5,  20,  0,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL );
 insert into course values ( 'WKRPT' , '401' , '0.13' , 'Work-term Report' );
 insert into component values ( 7735,  "WKRPT",  "401",  "PRJ",  "001",  "UW",  "U",  1,  50,  0,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL );
+
+
+insert into student values(10000001, "Karan", "Manku", "Computer Science", "Math", "karanmanku");
+insert into student values(10000002, "Henry", "Guo", "Computer Science", "Math", "henryguo");
+insert into student values(10000003, "Ryan", "Zhang", "Computer Science", "Math", "ryanzhang");
+insert into student values(10000004, "Jiadi", "Tao", "Computer Science", "Math", "jiaditao");
+insert into student values(10000005, "Matthew", "Elias", "Biology", "Science", "matthewelias");
+
+insert into attends values(10000001, 6010);
+insert into attends values(10000001, 6011);
+insert into attends values(10000002, 6010);
+insert into attends values(10000002, 6012);
+insert into attends values(10000003, 6010);
+insert into attends values(10000003, 6011);
+insert into attends values(10000004, 6019);
+insert into attends values(10000005, 6019);
+
+insert into likes values(10000001,  "CS", "341");
+insert into likes values(10000001,  "CS", "240");
+insert into likes values(10000002,  "CS", "240");
+insert into likes values(10000003,  "CS", "341");
+insert into likes values(10000004,  "CS", "245");
+insert into likes values(10000005,  "CS", "245");
+
+insert into friends values(10000005, 10000001);
+insert into friends values(10000005, 10000002);
+insert into friends values(10000005, 10000003);
+insert into friends values(10000005, 10000004);
+insert into friends values(10000002, 10000003);
+insert into friends values(10000002, 10000004);
+insert into friends values(10000003, 10000002);
+insert into friends values(10000003, 10000004);
+insert into friends values(10000004, 10000002);
+insert into friends values(10000004, 10000003);
