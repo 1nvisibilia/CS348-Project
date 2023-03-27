@@ -8085,6 +8085,14 @@ insert into student values(10000003, "Ryan", "Zhang", "Computer Science", "Math"
 insert into student values(10000004, "Jiadi", "Tao", "Computer Science", "Math", "jiaditao");
 insert into student values(10000005, "Matthew", "Elias", "Biology", "Science", "matthewelias");
 
+insert into attends values(10000001, 6010);
+insert into attends values(10000001, 6011);
+insert into attends values(10000002, 6010);
+insert into attends values(10000002, 6012);
+insert into attends values(10000003, 6010);
+insert into attends values(10000003, 6011);
+insert into attends values(10000004, 6019);
+insert into attends values(10000005, 6019);
 
 insert into likes values(10000001,  "CS", "341");
 insert into likes values(10000001,  "CS", "240");
