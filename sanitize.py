@@ -10,6 +10,8 @@ import sys
 
     Output: A cleaned file - sanitized_prod_data_insert.sql
 """
+sys.stdout.reconfigure(encoding='utf-8')
+
 cnx = mysql.connector.connect(
     host='localhost',
 	user='root',
@@ -24,6 +26,8 @@ INPUT_FILE = "prod_data_insert.sql"  # Change this if you want to sanitize somet
 with open(INPUT_FILE) as f:
     lines = f.read().splitlines()
 
+
+print('USE MySchedule;')
 failCount = 0
 for query in lines:
     # Attempt to execute the SQL query
