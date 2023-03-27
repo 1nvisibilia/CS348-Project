@@ -45,8 +45,9 @@ for query in lines:
         failCount += 1
 
 print("stderr: total invalid SQL queries: {}".format(failCount), file=sys.stderr)
-print("stderr: Summary of general error reasons: {}".format(failCount), file=sys.stderr)
+print("stderr: Summary of {} general error reason(s):".format(len(errorReasons)), file=sys.stderr)
 print('\n'.join(errorReasons),  file=sys.stderr)
+
 # Don't actually commit anything
 cnx.rollback()
 cursor.close()
