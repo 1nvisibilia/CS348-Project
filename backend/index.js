@@ -134,6 +134,24 @@ app.get('/friends', async (req, res) => {
 		})
 })
 
+app.get('/popular', async (req, res) => {
+	db.query(`
+	SELECT *, totEnroll + likes AS popularity
+	FROM 
+    (SELECT csub, cnum, SUM(enrollTot) AS totEnroll,   
+        SUM(enrollCap) AS totalCap, likes
+        FROM
+            (SELECT csub, cnum, COUNT(SID) AS likes
+            FROM Likes
+            GROUP BY csub, cnum )
+            AS T1 NATURAL JOIN Component
+        GROUP BY csub, cnum) AS T2
+    ORDER BY popularity DESC;`, (err, results) => {
+		if (err) throw err;
+		res.send(results);
+	})
+});
+
 app.get('/schedule', async (req, res) => {
 	const { userId } = req.query
 

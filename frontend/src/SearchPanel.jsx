@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import ResultTable from './ResultTable';
-import { Select, MenuItem, FormControl, InputLabel, TextField, Button, Box, Collapse, Paper } from '@mui/material';
+import { Select, MenuItem, FormControl, InputLabel, TextField, Button, Box, Collapse, Paper, Typography } from '@mui/material';
 
 const courseSubs = [
     'Any', 'CS', 'ECE', 'MATH', 'AMATH', 'PMATH', 'SE', 'STAT', 'CO', 'A', 'B', 'Bf', '3B', 'D1', '34B'
@@ -25,10 +25,17 @@ export default function SearchPanel({ user }) {
     const [matchAll, setMatchAll] = useState(true);
     const [queryResult, setResult] = useState(null);
 
+    const [popularCourses, setPopularCourses] = useState([]);
+
     const checkNumberValidity = (courseNum) => {
         const valid = courseNum === '' || (0 < parseInt(courseNum) && parseInt(courseNum) < 1000);
         setValid(valid);
         return valid;
+    }
+
+    const getPopularCourses = async () => {
+        const response = await axios.get('/popular');
+        setPopularCourses(response.data);
     }
 
     const searchQuery = async () => {
@@ -53,7 +60,7 @@ export default function SearchPanel({ user }) {
     };
 
     return (
-        <Paper style={{ margin: '0 8em', padding: '2em' }}>
+        <Paper style={{ margin: '0 4em', padding: '2em' }}>
             <div>
                 <Box style={{ margin: '0 0 2em', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <FormControl>
@@ -192,6 +199,19 @@ export default function SearchPanel({ user }) {
             {
                 (queryResult && (typeof queryResult === 'object'))
                     ? <ResultTable user={user} queryResult={queryResult} deleteEnabled={false}></ResultTable> : <></>
+            }
+
+            <div style={{ margin: '4em 0 1em' }}>
+                <Typography>
+                    <span>Not sure what to pick? Check out the most popular courses right now</span>
+                </Typography>
+                <Button onClick={getPopularCourses}>See popular courses</Button>
+            </div>
+
+            {
+                popularCourses.length > 0
+                    ? <ResultTable user={user} queryResult={popularCourses} deleteEnabled={false}></ResultTable>
+                    : <></>
             }
         </Paper>
     );
