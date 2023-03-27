@@ -30,7 +30,8 @@ def make_insert_student(student_id):
 def make_friendships(friendships, start_sid, end_sid):
     for frienderid in range(start_sid, end_sid):
         num_friends = random.randint(0, 10)
-        friends = random.choices(range(start_sid, end_sid), k=num_friends)
+        # Sample without duplicates
+        friends = random.sample(range(start_sid, end_sid), k=num_friends)
         for friendeeid in friends:
             # Protect these statements from failing
             if (frienderid != friendeeid):
@@ -41,6 +42,7 @@ def make_insert_attends(student_id, component_id):
 
 # Create the students
 START_STUDENT_ID = 10000001
+# The first 5 students were generated manually (sample data)
 student_id = START_STUDENT_ID + 5
 for i in range(20000):
     print(make_insert_student(student_id))
@@ -53,14 +55,11 @@ print('\n')
 friendships = []
 make_friendships(friendships, START_STUDENT_ID, END_STUDENT_ID)
 
-print('\n')
-
 # Enroll students in classes
 query = 'SELECT id, enrollTot FROM component'
 cursor = cnx.cursor()
 cursor.execute(query)
 results = cursor.fetchall()
-totalEnrollments = 0
 
 enrollments = []
 for row in results:
@@ -70,6 +69,8 @@ for row in results:
      # We should insert enrollTot students   
     while successfulInserts < enrollTot:  
         attempts += 1   
+        # If (# attemps so far == # students), generate more students to improve the success rate
+        # This is a randomized algorithm
         if attempts > END_STUDENT_ID - START_STUDENT_ID:
             old_end = END_STUDENT_ID
             END_STUDENT_ID += 5000
@@ -79,7 +80,7 @@ for row in results:
                 print(insert_student)
             make_friendships(friendships, old_end, END_STUDENT_ID)
 
-        # Attempt the insert
+        # Attempt the insert on a random student
         # This will fail if the added component interferes with an existing component of the student's schedule
         try:
             sid = random.randint(START_STUDENT_ID, END_STUDENT_ID)
@@ -88,12 +89,11 @@ for row in results:
             successfulInserts += 1
         except:
             pass
-    totalEnrollments += enrollTot
 
-print("insert into friends values" + ','.join(['({},{})'.format(friender, friendee) for friender, friendee in friendships]) + ';')
-print("insert into attends values" + ','.join(['({},{})'.format(sid, cid) for sid, cid in enrollments]) + ';')
+print("insert into friends values" + ',\n'.join(['({},{})'.format(friender, friendee) for friender, friendee in friendships]) + ';')
+print("insert into attends values" + ',\n'.join(['({},{})'.format(sid, cid) for sid, cid in enrollments]) + ';')
 
-
+# Don't actually commit anything
 cnx.rollback()
         
 
