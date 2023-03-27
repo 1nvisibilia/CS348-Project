@@ -18,9 +18,12 @@ To create the sample database,
     * __Username:__ _root_
     * __Password:__ _password_
 
-2. Execute ___schema_construct.sql___ in MySQL workbench to construct the tables and schema.
+2. From the CS348-Project root directory, with the local instance of the MySQL server running,
+    * Run `./init_prod_database.py` to initialize the database, schema, triggers, and load the `production` data all at once.
+    * OR run `./init_sample_database.py` to initialize the database, schema, triggers, and load the `sample` data all at once.
+    * Note: If you wish to switch between the sample and production databases, then you must drop the database before running the other script.
 
-3. Execute ___data_insert.sql___ to seed the sample database with data.
+
 
 <br/>
 
