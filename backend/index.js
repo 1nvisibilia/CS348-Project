@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
-	password: 'IWL2si2root2day!',
+	password: 'password',
 	database: 'myschedule',
 	port: 3306,
 });
@@ -270,8 +270,8 @@ app.post('/modifyCourse', (req, res) => {
 		INSERT INTO attends VALUES(${user}, ${componentID});
 		`,
 			(err, results) => {
-				if (err) throw err;
-				res.send(true);
+				if (err) res.send('You cannot add this course due to a schedule conflict')
+				else res.send(true);
 			})
 	} else if (addMethod == 'report') {
 		db.query(`
