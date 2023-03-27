@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
-	password: 'password',
+	password: 'IWL2si2root2day!',
 	database: 'myschedule',
 	port: 3306,
 });
@@ -37,15 +37,20 @@ app.get('/login', (req, res) => {
 		throw new Error("ID not valid.");
 	}
 
+	result = false;
 	db.query(`
 		SELECT id, pword
 		FROM Student
+		WHERE id=${userID} AND pword='${req.query.userpw}'
+		UNION
+		SELECT id, pword
+		FROM PROFESSOR
 		WHERE id=${userID} AND pword='${req.query.userpw}'
 	`,
 		(err, results) => {
 			if (err) throw err;
 			res.send(results.length > 0);
-		})	
+		});
 })
 
 app.get('/search', async (req, res) => {
