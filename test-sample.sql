@@ -1,3 +1,4 @@
+use MySchedule;
 # R6 Feature 1
 
 # Display a user's friends they have added by their id, first and last names
