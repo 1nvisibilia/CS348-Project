@@ -28,8 +28,6 @@ create table Course
 cnum varchar(5),
 credit numeric(3,2),
 title varchar(30),
-index num_ind (cnum),
-index sub_ind (csub),
 primary key (csub, cnum));
 
 create table Professor
@@ -46,11 +44,8 @@ cnum varchar(5),
 foreign key (sid) 
 references student (id) 
 on delete cascade,
-foreign key (csub)
-references course (csub)
-on delete cascade,
-foreign key (cnum)
-references course (cnum)
+foreign key (csub, cnum)
+references course (csub, cnum)
 on delete cascade,
 primary key (sid, csub, cnum));
 
@@ -58,11 +53,8 @@ create table Component
 (id varchar(5) primary key,
 csub varchar(6),
 cnum varchar(5),
-foreign key (csub)
-references course (csub)
-on delete cascade,
-foreign key (cnum)
-references course (cnum)
+foreign key (csub, cnum)
+references course (csub, cnum)
 on delete cascade,
 ctype char(3),
 secnum char(3),
