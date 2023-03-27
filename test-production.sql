@@ -1,12 +1,14 @@
+use MySchedule;
+
 # R6 Feature 1
 
 # Display a user's friends they have added by their id, first and last names
-# Assume userID = 10023901
+# Assume userID = 10009467
 SELECT friendeeid, first_name, last_name, cid, csub, cnum
 FROM student INNER JOIN (
 	SELECT DISTINCT friendeeid, C.id AS cid, csub, cnum
 	FROM friends, component AS C
-	WHERE frienderid = 10023901
+	WHERE frienderid = 10009467
 		AND C.id IN (SELECT cid FROM attends WHERE sid = frienderid) 
 		AND C.id IN (SELECT cid FROM attends WHERE sid = friendeeid)) AS T
 ON id = friendeeid;
@@ -17,7 +19,7 @@ ON id = friendeeid;
 SELECT *
 FROM course
 INNER JOIN component USING(csub, cnum)
-WHERE cnum = 101
+WHERE cnum = 101;
 
 # R8 Feature 3
 # Assume user has selected a component that they wish to enroll in

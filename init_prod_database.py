@@ -15,11 +15,11 @@ with open("schema_construct.sql") as f:
     sql_file = f.read()
     try:
         cursor.execute(sql_file)
-        print("Created database\n", file=sys.stderr)
+        print("Created database", file=sys.stderr)
         # Wait a few seconds for the database to create
         time.sleep(3)
     except mysql.connector.Error as err:
-        print("Failed to create database: {}\n".format(err), file=sys.stderr)
+        print("Failed to create database: {}".format(err), file=sys.stderr)
 
 cursor.close()
 cnx.close()
@@ -47,7 +47,7 @@ for file in ORDERED_INPUT_FILES:
         try:
             cursor.execute(query)
         except mysql.connector.Error as err:
-            print("Failed to execute: {}\n".format(err), file=sys.stderr)
+            # print("Failed to execute: {}\n".format(err), file=sys.stderr)
             pass  
 cnx.commit()
 print("Completed. The database is now populated with production data", file=sys.stderr)
