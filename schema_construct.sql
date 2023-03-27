@@ -169,7 +169,7 @@ BEGIN
 						FROM Component
 						JOIN curCompIds ON curCompIds.cid = Component.id)
 		SELECT *
-        FROM curComps JOIN newComp
+        FROM curComps JOIN newComp #so newComp can be easily referred
         WHERE ((curComps.startdate <= newComp.enddate AND curComps.enddate >= newComp.startdate) 
         OR curComps.startdate IS NULL OR curComps.enddate IS NULL OR newComp.startdate IS NULL OR newComp.enddate IS NULL)
         #if date is null, it's assumed to run for full term, so still return true for conflict
@@ -196,7 +196,7 @@ BEGIN
 						FROM Component
                         JOIN curCompIds ON curCompIds.cid = Component.id)
 		SELECT *
-        FROM curComps JOIN newComp
+        FROM curComps JOIN newComp #so newComp can be easily referred
 		WHERE ((curComps.startdate <= newComp.enddate AND curComps.enddate >= newComp.startdate) 
         OR curComps.startdate IS NULL OR curComps.enddate IS NULL OR newComp.startdate IS NULL OR newComp.enddate IS NULL)
         #if date is null, it's assumed to run for full term, so still return true for conflict
