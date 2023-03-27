@@ -1,6 +1,7 @@
 import mysql.connector
 import random
 from faker import Faker
+import sys
 
 # Ensure the result of randomizations is always the same
 seed = 1510
@@ -15,6 +16,7 @@ cnx = mysql.connector.connect(
 	database='myschedule',
 	port=3306
 )
+cursor = cnx.cursor()
 
 def make_insert_student(student_id):
     first, last = fake.first_name(), fake.last_name()
@@ -48,7 +50,9 @@ START_STUDENT_ID = 10000001
 # The first 5 students were generated manually (sample data)
 student_id = START_STUDENT_ID + 5
 for i in range(20000):
-    print(make_insert_student(student_id))
+    query = make_insert_student(student_id) 
+    cursor.execute(query)
+    print(query)
     student_id += 1
 END_STUDENT_ID = student_id
 
@@ -60,7 +64,6 @@ make_friendships(friendships, START_STUDENT_ID, END_STUDENT_ID)
 
 # Enroll students in classes
 query = 'SELECT id, enrollTot FROM component'
-cursor = cnx.cursor()
 cursor.execute(query)
 results = cursor.fetchall()
 
@@ -82,15 +85,17 @@ for row in results:
                 cursor.execute(insert_student)
                 print(insert_student)
             make_friendships(friendships, old_end, END_STUDENT_ID)
+            print("stderr: student count is {}, enrollments so far is {}".format(END_STUDENT_ID - START_STUDENT_ID, len(enrollments)), file=sys.stderr)
 
         # Attempt the insert on a random student
         # This will fail if the added component interferes with an existing component of the student's schedule
+        sid = random.randint(START_STUDENT_ID, END_STUDENT_ID)
+        query = make_insert_attends(sid, cid)
         try:
-            sid = random.randint(START_STUDENT_ID, END_STUDENT_ID)
-            cursor.execute(make_insert_attends(sid, cid))
+            cursor.execute(query)
             enrollments.append((sid, cid))
             successfulInserts += 1
-        except:
+        except mysql.connector.Error as err:
             pass
 
 print("insert into friends values" + ',\n'.join(['({},{})'.format(friender, friendee) for friender, friendee in friendships]) + ';')
