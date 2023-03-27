@@ -93,8 +93,11 @@ FOR EACH ROW
 BEGIN
     IF EXISTS (
         SELECT * FROM Component
-        WHERE starttime <= NEW.endtime
-        AND endtime >= NEW.starttime
+        WHERE ((startdate <= NEW.enddate AND enddate >= NEW.startdate) 
+        OR startdate IS NULL OR enddate IS NULL OR NEW.startdate IS NULL or NEW.enddate IS NULL)
+        #if date is null, it's assumed to run for full term, so still return true for conflict
+        AND (starttime <= NEW.endtime AND endtime >= NEW.starttime)
+        #if time is null, it's assumed to be unspecified, so return false for conflict
         AND building = NEW.building
         AND room = NEW.room
     ) THEN
