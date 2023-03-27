@@ -29,18 +29,26 @@ with open(INPUT_FILE) as f:
 
 print('USE MySchedule;')
 failCount = 0
+errorReasons = set()
 for query in lines:
     # Attempt to execute the SQL query
     # Print only if it succeeds
     try:
         cursor.execute(query)
         print(query)
-    except:
+    except mysql.connector.Error as err:
         # Print to stderr so output redirection works properly
+        err = str(err)
         print("stderr: failed: {}".format(query), file=sys.stderr)
+        print("stderr: reason: {}\n".format(err), file=sys.stderr)
+        errorReasons.add(err[err.index(':'):])
         failCount += 1
 
 print("stderr: total invalid SQL queries: {}".format(failCount), file=sys.stderr)
+print("stderr: Summary of {} general error reason(s):".format(len(errorReasons)), file=sys.stderr)
+print('\n'.join(errorReasons),  file=sys.stderr)
 
 # Don't actually commit anything
 cnx.rollback()
+cursor.close()
+cnx.close()
