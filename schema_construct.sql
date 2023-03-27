@@ -8,7 +8,7 @@ create table Student
 (id char(8) primary key,
 first_name varchar(25),
 last_name varchar(25),
-program varchar(20),
+program varchar(40),
 faculty varchar(20),
 pword varchar(20));
 
@@ -80,7 +80,7 @@ create table Attends
 foreign key (sid)
 references student (id)
 on delete cascade,
-cid char(4),
+cid char(5),
 foreign key (cid)
 references Component (id)
 on delete cascade,
