@@ -394,3 +394,5 @@ insert into friends values(30000000, 20000000);
 insert into friends values(30000000, 40000000);
 insert into friends values(40000000, 20000000);
 insert into friends values(40000000, 30000000);
+
+insert into Professor values(12121212, "Arif", "Usta", FALSE, "arif");

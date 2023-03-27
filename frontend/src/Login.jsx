@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
 import { red } from '@mui/material/colors';
 
-const Login = ({authSuccessCallback}) => {
+const Login = ({ authSuccessCallback }) => {
     const paperStyle = { padding: 20, height: '70vh', width: 280, margin: "20px auto" };
     const avatarStyle = { backgroundColor: '#1bbd7e' };
     const btnstyle = { margin: '8px 0' };
@@ -13,18 +13,17 @@ const Login = ({authSuccessCallback}) => {
     const [loginFailed, setFailed] = useState(false);
 
     const authenticate = async () => {
-        console.log(userName, userpw);
         const response = await axios.get('/login', {
             params: {
                 userName,
                 userpw
             }
         })
-
-        if (response.data) {
+        console.log(response.data);
+        if (response.data.auth) {
             // authed
             setFailed(false);
-            authSuccessCallback(userName);
+            authSuccessCallback(userName, response.data.admin);
         } else {
             // error
             setFailed(true);

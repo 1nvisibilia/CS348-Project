@@ -33,25 +33,30 @@ app.get('/login', (req, res) => {
 	 * false otherwise
 	 */
 	userID = parseInt(req.query.userName, 10);
-	if(isNaN(userID)) {
+	if (isNaN(userID)) {
 		// no need to throw error here, the server should still function
 		res.send(false);
 		return;
 	}
 
-	result = false;
 	db.query(`
 		SELECT id, pword
-		FROM Student
-		WHERE id=${userID} AND pword='${req.query.userpw}'
-		UNION
-		SELECT id, pword
 		FROM PROFESSOR
-		WHERE id=${userID} AND pword='${req.query.userpw}'
-	`,
+		WHERE id=${userID} AND pword='${req.query.userpw}'`,
 		(err, results) => {
 			if (err) throw err;
-			res.send(results.length > 0);
+			if (results.length > 0) {
+				res.json({ auth: true, admin: true });
+				return;
+			}
+
+			db.query(`
+			SELECT id, pword
+			FROM Student
+			WHERE id=${userID} AND pword='${req.query.userpw}'`, (err, results) => {
+				if (err) throw err;
+				res.json({ auth: results.length > 0, admin: false });
+			})
 		});
 })
 
@@ -79,13 +84,13 @@ app.get('/search', async (req, res) => {
 		}
 
 	 */
-	
+
 	const attrMapper = {
 		'courseSub': 'csub',
 		'courseCode': 'cnum',
 		'courseType': 'ctype',
 		'courseName': 'title',
-		'campusOff' : 'campoff',
+		'campusOff': 'campoff',
 	}
 
 	const concatenator = req.query.searchAll === 'true' ? ' OR ' : ' AND '
@@ -94,7 +99,7 @@ app.get('/search', async (req, res) => {
 			if (attribute === 'searchAll') {
 				return undefined
 			} else if (attribute === 'courseName') {
-				return `${attrMapper[attribute]} LIKE '%${value}%'` 
+				return `${attrMapper[attribute]} LIKE '%${value}%'`
 			} else if (attribute === 'avail') {
 				return 'enrolltot < enrollcap'
 			}
@@ -131,7 +136,7 @@ app.get('/friends', async (req, res) => {
 
 app.get('/schedule', async (req, res) => {
 	const { userId } = req.query
-	
+
 	db.query(`
 		SELECT *
 		FROM component
@@ -186,7 +191,7 @@ app.get('/popular', (req, res) => {
 		(err, results) => {
 			if (err) throw err;
 			res.send(results);
-		})	
+		})
 })
 
 app.delete('/modifyFriends', async (req, res) => {
@@ -240,10 +245,10 @@ app.delete('/modifyCourse', (req, res) => {
 	db.query(`
 	DELETE FROM attends
 	WHERE sid = ${userId} and cid = ${target}`,
-	(err, results) => {
-		if (err) throw err
-		res.send(results)
-	})
+		(err, results) => {
+			if (err) throw err
+			res.send(results)
+		})
 })
 
 app.post('/modifyCourse', (req, res) => {
@@ -258,26 +263,26 @@ app.post('/modifyCourse', (req, res) => {
 	 * 
 	 * return true for successful addition of the course, or a string that indicate failing reason:
 	 */
-	const { user, addMethod, componentID} = req.body
+	const { user, addMethod, componentID } = req.body
 
 	if (addMethod == 'add') {
 		db.query(`
 		INSERT INTO attends VALUES(${user}, ${componentID});
 		`,
-		(err, results) => {
-			if (err) throw err;
-			res.send(true);
-		})
+			(err, results) => {
+				if (err) throw err;
+				res.send(true);
+			})
 	} else if (addMethod == 'report') {
 		db.query(`
 		SELECT *
 		FROM Attends
 		WHERE sid=${user} AND cid=${componentID}
 		`,
-		(err, results) => {
-			if(err) throw err;
-			res.send(results.length > 0);
-		}
+			(err, results) => {
+				if (err) throw err;
+				res.send(results.length > 0);
+			}
 		)
 	} else {
 		throw new Error("Invalid add method.");
