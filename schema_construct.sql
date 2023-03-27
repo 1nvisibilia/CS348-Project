@@ -80,7 +80,7 @@ create table Attends
 foreign key (sid)
 references student (id)
 on delete cascade,
-cid char(5),
+cid varchar(5),
 foreign key (cid)
 references Component (id)
 on delete cascade,
