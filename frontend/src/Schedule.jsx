@@ -12,9 +12,9 @@ export default function Schedule({ user }) {
     useEffect(() => {
         const querySchedule = async () => {
             try {
-                    const scheduleResponse = await axios.get('/schedule', {
+                const scheduleResponse = await axios.get('/schedule', {
                     params: {
-                        userId: '10000000'
+                        userId: user
                     }
                 })
                 setResult(scheduleResponse?.data)

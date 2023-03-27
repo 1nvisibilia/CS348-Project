@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-	// req.query contains, for example: { userName: 'j63tao', userpw: 'secretpw' }
+	// req.query contains, for example: { userName: '40000000', userpw: 'secretpw' }
 
 	/**
 	 * check DB if userName exists, if so check if pw matches. return true if info are correct,
@@ -34,7 +34,9 @@ app.get('/login', (req, res) => {
 	 */
 	userID = parseInt(req.query.userName, 10);
 	if(isNaN(userID)) {
-		throw new Error("ID not valid.");
+		// no need to throw error here, the server should still function
+		res.send(false);
+		return;
 	}
 
 	result = false;
