@@ -36,8 +36,7 @@ cnx = mysql.connector.connect(
 cursor = cnx.cursor()
 # Executes the statements from the following files in order
 ORDERED_INPUT_FILES = [
-    "sanitized_prod_data_insert.sql",
-    "prod_student_data_insert.sql"
+    "data_insert.sql",
 ]
 for file in ORDERED_INPUT_FILES:
     with open(file, encoding='utf-8') as f:
@@ -50,7 +49,7 @@ for file in ORDERED_INPUT_FILES:
             print("Failed to execute: {}\n".format(err), file=sys.stderr)
             pass  
 cnx.commit()
-print("Completed. The database is now populated with production data", file=sys.stderr)
+print("Completed. The database is now populated with sample data", file=sys.stderr)
 cursor.close()
 cnx.close()
 
