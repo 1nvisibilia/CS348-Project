@@ -169,13 +169,13 @@ BEGIN
 						FROM Component
 						JOIN curCompIds ON curCompIds.cid = Component.id)
 		SELECT *
-        FROM curComps
-        WHERE ((curComps.startdate <= (select enddate from newComp) AND curComps.enddate >= (select startdate from newComp)) 
-        OR curComps.startdate IS NULL OR curComps.enddate IS NULL OR (select startdate from newComp) IS NULL OR (select enddate from newComp) IS NULL)
+        FROM curComps JOIN newComp
+        WHERE ((curComps.startdate <= newComp.enddate AND curComps.enddate >= newComp.startdate) 
+        OR curComps.startdate IS NULL OR curComps.enddate IS NULL OR newComp.startdate IS NULL OR newComp.enddate IS NULL)
         #if date is null, it's assumed to run for full term, so still return true for conflict
-        AND (curComps.starttime <= (select endtime from newComp) AND curComps.endtime >= (select starttime from newComp))
+        AND (curComps.starttime <= newComp.endtime AND curComps.endtime >= newComp.starttime)
         #if time is null, it's assumed to be unspecified, so return false for conflict
-        AND curComps.weekday = (select weekday from newComp)
+        AND curComps.weekday = newComp.weekday
 	)
     THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insert not allowed. Attends conflict exists.';
@@ -196,13 +196,13 @@ BEGIN
 						FROM Component
                         JOIN curCompIds ON curCompIds.cid = Component.id)
 		SELECT *
-        FROM curComps
-        WHERE ((curComps.startdate <= (select enddate from newComp) AND curComps.enddate >= (select startdate from newComp)) 
-        OR curComps.startdate IS NULL OR curComps.enddate IS NULL OR (select startdate from newComp) IS NULL OR (select enddate from newComp) IS NULL)
+        FROM curComps JOIN newComp
+		WHERE ((curComps.startdate <= newComp.enddate AND curComps.enddate >= newComp.startdate) 
+        OR curComps.startdate IS NULL OR curComps.enddate IS NULL OR newComp.startdate IS NULL OR newComp.enddate IS NULL)
         #if date is null, it's assumed to run for full term, so still return true for conflict
-        AND (curComps.starttime <= (select endtime from newComp) AND curComps.endtime >= (select starttime from newComp))
+        AND (curComps.starttime <= newComp.endtime AND curComps.endtime >= newComp.starttime)
         #if time is null, it's assumed to be unspecified, so return false for conflict
-        AND curComps.weekday = (select weekday from newComp)
+        AND curComps.weekday = newComp.weekday
         AND curComps.cid <> OLD.cid #can't conflict with old component that got updated
 	)
     THEN
