@@ -1,12 +1,12 @@
 # R6 Feature 1
 
 # Display a user's friends they have added by their id, first and last names
-# Assume userID = 50000000
+# Assume userID = 10023901
 SELECT friendeeid, first_name, last_name, cid, csub, cnum
 FROM student INNER JOIN (
 	SELECT DISTINCT friendeeid, C.id AS cid, csub, cnum
 	FROM friends, component AS C
-	WHERE frienderid = 50000000
+	WHERE frienderid = 10023901
 		AND C.id IN (SELECT cid FROM attends WHERE sid = frienderid) 
 		AND C.id IN (SELECT cid FROM attends WHERE sid = friendeeid)) AS T
 ON id = friendeeid;
@@ -32,19 +32,20 @@ SELECT id
 FROM component
 WHERE csub = 'CS'
 AND cnum = 348
-and assocnum = 1;
+AND (assocnum = 1 OR ctype = 'TST');
 
 # We leave the following as examples for insert and delete on attends for CS 343
 # Note that there is no output for these statements.
 INSERT INTO attends
-    VALUES (10000000, 6125), (10000000, 6407);
+    VALUES (10000050, 10479), (10000050, 6032), (10000050, 8855);
+
 
 DELETE FROM attends
-    WHERE sid = 10000000 AND Cid IN
+    WHERE sid = 10000050 AND Cid IN
     (SELECT id FROM component
 		WHERE csub = 'CS'
-		AND cnum = 343
-		AND assocnum = 1);
+		AND cnum = '348'
+		AND (assocnum = 1 OR ctype = 'TST'));
 
 # R9 Feature 4
 # These are only update, delete, and create trigger statements which have no output
@@ -64,4 +65,16 @@ AND csub = 'AFM'
 AND cnum = 101
 ORDER BY starttime, component.weekday DESC;
 
+# R11 Feature 6
+SELECT *, totEnroll + likes AS popularity
+FROM 
+    (SELECT csub, cnum, SUM(enrollTot) AS totEnroll,   
+     SUM(enrollCap) AS totalCap, likes
+     FROM
+         (SELECT csub, cnum, COUNT(SID) AS likes
+          FROM Likes
+          GROUP BY csub, cnum )
+          AS T1 NATURAL JOIN Component
+     GROUP BY csub, cnum) AS T2
+ORDER BY popularity DESC;
 

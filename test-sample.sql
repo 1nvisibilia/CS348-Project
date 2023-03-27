@@ -33,7 +33,7 @@ SELECT id
 FROM component
 WHERE csub = 'CS'
 AND cnum = 348
-and assocnum = 1;
+AND (assocnum = 1 OR ctype = 'TST');
 
 # We leave the following as examples for insert and delete on attends for CS 343
 # Note that there is no output for these statements.
@@ -44,8 +44,8 @@ DELETE FROM attends
     WHERE sid = 10000000 AND Cid IN
     (SELECT id FROM component
 		WHERE csub = 'CS'
-		AND cnum = 343
-		AND assocnum = 1);
+		AND cnum = 348
+		AND (assocnum = 1 OR ctype = 'TST'));
 
 # R9 Feature 4
 # These are only update, delete, and create trigger statements which have no output
@@ -65,4 +65,17 @@ AND csub = 'CS'
 AND cnum = 350
 ORDER BY starttime, component.weekday DESC;
 
+
+# R11 Feature 6
+SELECT *, totEnroll + likes AS popularity
+FROM 
+    (SELECT csub, cnum, SUM(enrollTot) AS totEnroll,   
+     SUM(enrollCap) AS totalCap, likes
+     FROM
+         (SELECT csub, cnum, COUNT(SID) AS likes
+          FROM Likes
+          GROUP BY csub, cnum )
+          AS T1 NATURAL JOIN Component
+     GROUP BY csub, cnum) AS T2
+ORDER BY popularity DESC;
 

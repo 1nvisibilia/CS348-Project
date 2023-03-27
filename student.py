@@ -40,7 +40,10 @@ def make_friendships(friendships, start_sid, end_sid):
 def make_insert_attends(student_id, component_id):
     return "insert into attends values({}, {});".format(student_id, component_id)
 
+
 # Create the students
+print('USE MySchedule;')
+
 START_STUDENT_ID = 10000001
 # The first 5 students were generated manually (sample data)
 student_id = START_STUDENT_ID + 5

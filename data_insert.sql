@@ -1,3 +1,5 @@
+USE MySchedule;
+
 insert into course values ( 'CS' , '100' , '0.5' , 'Intro Computing Through Applic' );
 insert into professor values ( "10000000",  "Dave",  "Tompkins",  0, NULL);
 insert into component values ( 6641,  "CS",  "100",  "LEC",  "081",  "ONLN",  "O",  81,  300,  265,  NULL,  NULL,  NULL,  NULL,  NULL,  "Online",  NULL, 10000000 );
