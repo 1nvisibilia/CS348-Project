@@ -1,6 +1,5 @@
 use MySchedule;
 
-
 DELIMITER $$
 CREATE TRIGGER cap_decr_delete
 AFTER DELETE ON Attends
