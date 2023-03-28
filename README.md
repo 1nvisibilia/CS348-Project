@@ -11,6 +11,7 @@ __Requires:__
 * ##### MySQL Workbench 8.0.32 or above (exactly 8.0.31 on MacOS)
 * ##### MySQL 8.0.32 or above
 To create the sample database, 
+
 1. First create a new local Instance. Use the following parameters:
     * __Connection Name (Optional):__ _MySchedule_ 
     * __Hostname:__ _localhost_
@@ -18,15 +19,29 @@ To create the sample database,
     * __Username:__ _root_
     * __Password:__ _password_
 
-2. Run `python3 init_schemas.py` to create the database and schemas. Wait for this to finish before proceeding to the next step.
-3. From the CS348-Project root directory, with the local instance of the MySQL server running and the database created,
-    * Run `python3 populate_prod_database.py` to load the `production` data all at once.
-    * OR run `python3 populate_sample_database.py` to load the `sample` data all at once.
-    * Note: If you wish to switch between the sample and production databases, then you must drop the data before running the other script.
+__AUTOMATIC METHOD:__
+This method may flake out depending on your machine, but it is worth trying since it is quick and correct if it works.
 
-3. Alternatively, you may manually run the `.sql` files to generate the production/sample databases. Copy-paste and execute in MySQL Workbench/Shell from files in the presented order to initialize the databases:
-    * __Production__: `schema_construct.sql`, `sanitized_prod_data_insert.sql`, `prod_student_data_insert.sql`, `post_init_schema_triggers.sql`
-    * __Sample__: `schema_construct.sql`, `prod_data_insert.sql`, `post_init_schema_triggers.sql`
+2. From the CS348-Project root directory, with the local instance of the MySQL server running,
+    * Run `python3 init_prod_database.py` to load the `production` data all at once.
+    * OR run `python3 init_sample_database.py` to load the `sample` data all at once.
+    * Note: If you wish to switch between the sample and production databases, then you must drop the database before running the other script.
+
+__MANUAL METHOD:__
+
+2. Alternatively, you may manually execute the `.sql` files to generate the production/sample databases in MySQL Workbench. Open and execute the scripts in MySQL Workbench in the presented order to initialize the databases. Note, some operations may time out the MySQL Workbench connection, before connecting to localhost, change Edit->Preferences->SQL Editor->DBMS connection time out interval = 90 (seconds) to avoid timing out.
+
+__Production__: Execute these scripts in this order
+ 1.  `schema_construct.sql`
+ 2. `sanitized_prod_data_insert.sql`
+ 3. `prod_student_data_insert.sql`
+ 4. `post_init_schema_triggers.sql`
+ 
+ 
+ __Sample__: Execute these scripts in this order
+ 1. `schema_construct.sql`
+ 2. `prod_data_insert.sql`
+ 3. `post_init_schema_triggers.sql`
 
 
 <br/>
