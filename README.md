@@ -19,8 +19,8 @@ To create the sample database,
     * __Password:__ _password_
 
 2. From the CS348-Project root directory, with the local instance of the MySQL server running,
-    * Run `./init_prod_database.py` to initialize the database, schema, triggers, and load the `production` data all at once.
-    * OR run `./init_sample_database.py` to initialize the database, schema, triggers, and load the `sample` data all at once.
+    * Run `python3 ./init_prod_database.py` to initialize the database, schema, triggers, and load the `production` data all at once.
+    * OR run `python3 ./init_sample_database.py` to initialize the database, schema, triggers, and load the `sample` data all at once.
     * Note: If you wish to switch between the sample and production databases, then you must drop the database before running the other script.
 
 2. Alternatively, you may manually run the `.sql` files to generate the production/sample databases. Copy-paste and execute in MySQL Workbench/Shell from files in the presented order to initialize the databases:
