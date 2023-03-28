@@ -24,7 +24,7 @@ To create the sample database,
     * OR run `python3 populate_sample_database.py` to load the `sample` data all at once.
     * Note: If you wish to switch between the sample and production databases, then you must drop the data before running the other script.
 
-3. Alternatively, you may manually run the `.sql` files to generate the production/sample databases. Copy-paste and execute in MySQL Workbench/Shell from files in the presented order to initialize the databases:
+3. Alternatively, you may manually execute the `.sql` files to generate the production/sample databases in MySQL Workbench. Open and execute the scripts in MySQL Workbench in the presented order to initialize the databases. Note, some operations may time out the MySQL Workbench connection, before connecting to localhost, change Edit->Preferences->SQL Editor->DBMS connection time out interval = 90 (seconds) to avoid timing out.
     * __Production__: `schema_construct.sql`, `sanitized_prod_data_insert.sql`, `prod_student_data_insert.sql`, `post_init_schema_triggers.sql`
     * __Sample__: `schema_construct.sql`, `prod_data_insert.sql`, `post_init_schema_triggers.sql`
 
