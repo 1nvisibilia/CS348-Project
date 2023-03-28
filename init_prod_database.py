@@ -2,12 +2,18 @@ import mysql.connector
 import sys
 import time
 
+HOST = 'localhost'
+USER = 'root'
+PASSWORD = 'password'
+PORT = 3306
+
+
 # Create the database and schema
 cnx = mysql.connector.connect(
-    host='localhost',
-	user='root',
-	password='password',
-	port=3306,
+    host=HOST,
+	user=USER,
+	password=PASSWORD,
+	port=PORT,
     autocommit=True
 )
 cursor = cnx.cursor()
@@ -17,7 +23,7 @@ with open("schema_construct.sql") as f:
         cursor.execute(sql_file)
         print("Created database", file=sys.stderr)
         # Wait a few seconds for the database to create
-        time.sleep(3)
+        time.sleep(5)
     except mysql.connector.Error as err:
         print("Failed to create database: {}".format(err), file=sys.stderr)
 
@@ -27,11 +33,11 @@ cnx.close()
 
 # Populate the database
 cnx = mysql.connector.connect(
-    host='localhost',
-	user='root',
-	password='password',
-    database="myschedule",
-	port=3306,
+    host=HOST,
+	user=USER,
+	password=PASSWORD,
+	port=PORT,
+    database='myschedule'
 )
 cursor = cnx.cursor()
 # Executes the statements from the following files in order
@@ -57,11 +63,11 @@ cnx.close()
 
 # Initiate any triggers that should be added after initializing the database
 cnx = mysql.connector.connect(
-    host='localhost',
-	user='root',
-	password='password',
-	port=3306,
-    database="myschedule",
+    host=HOST,
+	user=USER,
+	password=PASSWORD,
+	port=PORT,
+    database='myschedule',
     autocommit=True
 )
 cursor = cnx.cursor()
@@ -76,4 +82,3 @@ with open("post_init_schema_triggers.sql") as f:
 
 cursor.close()
 cnx.close()
-
