@@ -66,3 +66,18 @@ Navigate to the localhost link that appears in the output.
 
 ## Progress
 For milestone 1, the application implements Feature 2, allowing users to browse through courses offered at the school (based on the sample dataset). Furthermore, there is a partial implementation for feature 1 (finding which course components the user is taking together with each friend) and feature 5 (display a valid weekly schedule involving user specified courses).
+
+
+## Current Features
+
+### See Shared Courses/Components with Friends (R6)
+- Upon logging in, in the FRIENDS panel. The user can add/remove friends. In addition, the use can see a list of components that his/her friends are taking with the user.
+- Main implementation in: frontend\src\Friends.jsx
+
+### Search for Courses/Components (R7)
+- Upon arriving at the website, the user is prompted with a login UI. After logging in, in the SEARCH panel, the user can search for courses with complex query conditions, and will be displayed with matching results.
+- Main implementation in: frontend\src\Schedule.jsx
+
+### Displaying a weekly schedule of the user (R10)
+- In the SCHEDULE panel. The user can see a list of components he/she is currently taking. The user can also drop the component they are taking, and add components back in the SEARCH panel.
+- Main implementation in: frontend\src\Schedule.jsx
