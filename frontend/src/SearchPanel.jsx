@@ -2,10 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import ResultTable from './ResultTable';
 import { Select, MenuItem, FormControl, InputLabel, TextField, Button, Box, Collapse, Paper, Typography } from '@mui/material';
-
-const courseSubs = [
-    'Any', 'CS', 'ECE', 'MATH', 'AMATH', 'PMATH', 'SE', 'STAT', 'CO', 'A', 'B', 'Bf', '3B', 'D1', '34B'
-];
+import { courseSubs } from './courseSubjects';
 
 export default function SearchPanel({ user }) {
     // main queries
