@@ -307,6 +307,40 @@ app.post('/modifyCourse', (req, res) => {
 	}
 })
 
+app.put('/updateCourse', (req, res) => {
+	console.log(req.body);
+	/**
+	 * {
+	csub: 'CS',
+	cnum: '105',
+	id: '6546',
+	ctype: 'LAB',
+	secnum: '101',
+	campoff: 'UW',
+	camploc: 'U',
+	assocnum: '1',
+	enrollcap: 60,
+	enrolltot: 43,
+	startdate: null,
+	enddate: null,
+	starttime: '02:30:00',
+	endtime: '03:50:00',
+	weekday: 'M',
+	building: 'MC',
+	room: '3003',
+	pid: null,
+	credit: '0.5',
+	title: 'Intro Computer Programming 1'
+  }
+	 */
+	/**
+	 * note, the id in the req.body wont be modified from the front end
+	 */
+
+	// send either a status of successful update, or an error message for a trigger exception etc.
+	res.send(true);
+})
+
 app.listen(port, () => {
 	console.log(`App listening on http://localhost:${port}`);
 });

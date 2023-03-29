@@ -1,6 +1,7 @@
 import { Paper, Button, TextField, Dialog, Typography, Table, TableHead, TableRow, Tooltip, TableBody, TableCell, IconButton, TableContainer, Snackbar } from "@mui/material";
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
+import axios from 'axios';
 
 export default function AdminResultTable({ queryResult }) {
     const [open, setSnackbar] = useState(false);
@@ -19,6 +20,29 @@ export default function AdminResultTable({ queryResult }) {
 
     const modifyCourse = async () => {
         console.log(courseData);
+        if (!(/^\d+$/.test(courseData.cnum))) {
+            setMsg('Only numbers are allowed for Catalog Number');
+            return setSnackbar(true);
+        } else if (courseData.credit > 1) {
+            setMsg('Credit cannot be bigger than 1');
+            return setSnackbar(true);
+        } else if (!(/\d\d:\d\d:\d\d/.test(courseData.starttime))) {
+            setMsg('Start time must follow the format of hh:mm:ss');
+            return setSnackbar(true);
+        } else if (!(/\d\d:\d\d:\d\d/.test(courseData.endtime))) {
+            setMsg('End time must follow the format of hh:mm:ss');
+            return setSnackbar(true);
+        }
+
+        const response = await axios.put('/updateCourse', courseData);
+        console.log(response.data);
+
+        if (response.data === true) {
+            setMsg('Course updated successfully');
+        } else {
+            setMsg(response.data);
+        }
+        return setSnackbar(true);
     }
 
     return (
