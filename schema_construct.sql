@@ -91,33 +91,47 @@ CREATE TRIGGER component_update
 BEFORE UPDATE ON Component
 FOR EACH ROW
 BEGIN
-    IF EXISTS (
-        SELECT * FROM Component
-        WHERE ((startdate <= NEW.enddate AND enddate >= NEW.startdate) 
-        OR startdate IS NULL OR enddate IS NULL OR NEW.startdate IS NULL OR NEW.enddate IS NULL)
-        #if date is null, it's assumed to run for full term, so still return true for conflict
-        AND (starttime <= NEW.endtime AND endtime >= NEW.starttime)
-        #if time is null, it's assumed to be unspecified, so return false for conflict
-        AND weekday = NEW.weekday
-        AND building = NEW.building
-        AND room = NEW.room
-        AND id <> OLD.id #can't conflict with old component that got updated
-    ) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update not allowed. Component room conflict exists.';
-    END IF;
+	IF EXISTS (
+		SELECT * FROM Component
+		WHERE ((startdate <= NEW.enddate AND enddate >= NEW.startdate) 
+		OR startdate IS NULL OR enddate IS NULL OR NEW.startdate IS NULL OR NEW.enddate IS NULL)
+		#if date is null, it's assumed to run for full term, so still return true for conflict
+		AND (starttime <= NEW.endtime AND endtime >= NEW.starttime)
+		#if time is null, it's assumed to be unspecified, so return false for conflict
+		AND weekday = NEW.weekday
+		AND building = NEW.building
+		AND room = NEW.room
+		AND id <> OLD.id #can't conflict with old component that got updated
+	) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update not allowed. Component room conflict exists.';
+	END IF;
+	
+	IF EXISTS (
+		SELECT * FROM Component
+		WHERE ((startdate <= NEW.enddate AND enddate >= NEW.startdate) 
+		OR startdate IS NULL OR enddate IS NULL OR NEW.startdate IS NULL OR NEW.enddate IS NULL)
+		#if date is null, it's assumed to run for full term, so still return true for conflict
+		AND (starttime <= NEW.endtime AND endtime >= NEW.starttime)
+		#if time is null, it's assumed to be unspecified, so return false for conflict
+		AND weekday = NEW.weekday
+		AND pid = NEW.pid
+		AND id <> OLD.id #can't conflict with old component that got updated
+	) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update not allowed. Component teacher conflict exists.';
+	END IF;
     
-    IF EXISTS (
-        SELECT * FROM Component
-        WHERE ((startdate <= NEW.enddate AND enddate >= NEW.startdate) 
-        OR startdate IS NULL OR enddate IS NULL OR NEW.startdate IS NULL OR NEW.enddate IS NULL)
-        #if date is null, it's assumed to run for full term, so still return true for conflict
-        AND (starttime <= NEW.endtime AND endtime >= NEW.starttime)
-        #if time is null, it's assumed to be unspecified, so return false for conflict
-        AND weekday = NEW.weekday
-        AND pid = NEW.pid
-        AND id <> OLD.id #can't conflict with old component that got updated
+    IF(NEW.startdate <> OLD.startdate#if the change could cause schedule conflict for attending students
+    OR NEW.enddate <> OLD.enddate
+    OR NEW.starttime <> OLD.starttime
+    OR NEW.endtime <> OLD.endtime
+    OR NEW.weekday <> OLD.weekday
     ) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update not allowed. Component teacher conflict exists.';
+		#unenroll every student, so component update looks like old component delete and new component insert
+        DELETE FROM Attends
+        WHERE cid = OLD.id;
+        
+        #set component current enrollment total to 0
+        SET NEW.enrolltot = 0;
     END IF;
 END$$
 DELIMITER ;
