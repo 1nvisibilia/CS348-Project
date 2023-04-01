@@ -290,7 +290,7 @@ app.post('/modifyCourse', (req, res) => {
 })
 
 app.put('/updateCourse', (req, res) => {
-	console.log(req.body);
+	// console.log(req.body);
 	/**
 	 * {
 	csub: 'CS',
@@ -319,8 +319,28 @@ app.put('/updateCourse', (req, res) => {
 	 * note, the id in the req.body wont be modified from the front end
 	 */
 
-	// send either a status of successful update, or an error message for a trigger exception etc.
-	res.send(true);
+  	set_clause = ""
+	for (const [key, value] of Object.entries(req.body)) {
+		final_value = value;
+		if(typeof value === "string")
+			final_value = `'${final_value}'`
+		else if(typeof value === "number")
+			final_value = parseFloat(value);
+
+		if(!["id", "title", "credit"].includes(key))
+			set_clause += `${key}=${final_value}, `;
+	}
+	set_clause = set_clause.slice(0, -2);
+	db.query(`
+  		UPDATE Component
+  		SET ${set_clause}
+		WHERE id=${req.body.id}
+		`,
+			(err, results) => {
+				if (err) throw err;
+				res.send(true);
+			}
+		)  	
 })
 
 app.listen(port, () => {
