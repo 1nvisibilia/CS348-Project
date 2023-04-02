@@ -11,6 +11,14 @@ const Login = ({ authSuccessCallback }) => {
     const [userName, setUserName] = useState("");
     const [userpw, setUserpw] = useState("");
     const [loginFailed, setFailed] = useState(false);
+    const [loginLock, setLock] = useState(false);
+    const [failCounter, setCounter] = useState(4)
+
+    const timer = setTimeout(() => {
+        setLock(false)
+        setFailed(false)
+        setCounter(4)
+    }, 60000)
 
     const authenticate = async () => {
         const response = await axios.get('/login', {
@@ -26,6 +34,12 @@ const Login = ({ authSuccessCallback }) => {
             authSuccessCallback(userName, response.data.admin);
         } else {
             // error
+            setCounter(failCounter - 1)
+            if (failCounter === 1) {
+                setLock(true)
+                timer()
+                return
+            }
             setFailed(true);
         }
     }
@@ -37,15 +51,15 @@ const Login = ({ authSuccessCallback }) => {
                     <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
                     <h2>Sign In</h2>
                 </Grid>
-                <TextField onChange={(event) => setUserName(event.target.value)} value={userName}
+                <TextField onChange={(event) => setUserName(event.target.value)} value={userName} disabled={loginLock}
                     style={{ margin: '2em 0' }} label='Student ID #' placeholder='Enter username' variant="outlined" fullWidth required />
-                <TextField onChange={(event) => setUserpw(event.target.value)} value={userpw}
+                <TextField onChange={(event) => setUserpw(event.target.value)} value={userpw} disabled={loginLock}
                     style={{ margin: '0 0 2em' }} label='Password' placeholder='Enter password' type='password' variant="outlined" fullWidth required />
-                <Button onClick={authenticate} type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Sign in</Button>
+                <Button onClick={authenticate} type='submit' color='primary' variant="contained" style={btnstyle} disabled={loginLock} fullWidth>Sign in</Button>
                 {
-                    loginFailed
-                        ? <Typography color={red[500]}>Username or password is incorrect</Typography>
-                        : <></>
+                    loginLock ? <Typography color={red[500]}>Too many failed attempts, please try again in 60 seconds</Typography>
+                    : loginFailed ? <Typography color={red[500]}>Username or password is incorrect, {failCounter} attempts remaining</Typography>
+                    : <></>
                 }
             </Paper>
         </Grid>
