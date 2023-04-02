@@ -3,7 +3,7 @@ import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 
-export default function AdminResultTable({ queryResult }) {
+export default function AdminResultTable({ queryResult, updateCallback }) {
     const [open, setSnackbar] = useState(false);
     const [snackMsg, setMsg] = useState('');
     const [courseData, setCourseData] = useState({});
@@ -26,19 +26,20 @@ export default function AdminResultTable({ queryResult }) {
         } else if (courseData.credit > 1) {
             setMsg('Credit cannot be bigger than 1');
             return setSnackbar(true);
-        } else if (!(/\d\d:\d\d:\d\d/.test(courseData.starttime))) {
+        } else if (courseData.starttime && !(/\d\d:\d\d:\d\d/.test(courseData.starttime))) {
             setMsg('Start time must follow the format of hh:mm:ss');
             return setSnackbar(true);
-        } else if (!(/\d\d:\d\d:\d\d/.test(courseData.endtime))) {
+        } else if (courseData.endtime && !(/\d\d:\d\d:\d\d/.test(courseData.endtime))) {
             setMsg('End time must follow the format of hh:mm:ss');
             return setSnackbar(true);
         }
 
         const response = await axios.put('/updateCourse', courseData);
-        console.log(response.data);
 
         if (response.data === true) {
             setMsg('Course updated successfully');
+            updateCallback(courseData);
+            setdialog(false);
         } else {
             setMsg(response.data);
         }

@@ -319,15 +319,15 @@ app.put('/updateCourse', (req, res) => {
 	 * note, the id in the req.body wont be modified from the front end
 	 */
 
-  	set_clause = ""
+	set_clause = ""
 	for (const [key, value] of Object.entries(req.body)) {
 		final_value = value;
-		if(typeof value === "string")
+		if (typeof value === "string")
 			final_value = `'${final_value}'`
-		else if(typeof value === "number")
+		else if (typeof value === "number")
 			final_value = parseFloat(value);
 
-		if(!["id", "title", "credit"].includes(key))
+		if (!["id", "title", "credit"].includes(key))
 			set_clause += `${key}=${final_value}, `;
 	}
 	set_clause = set_clause.slice(0, -2);
@@ -336,11 +336,14 @@ app.put('/updateCourse', (req, res) => {
   		SET ${set_clause}
 		WHERE id=${req.body.id}
 		`,
-			(err, results) => {
-				if (err) throw err;
+		(err, results) => {
+			if (err) {
+				res.send('An error occured. Please try updating later');
+			} else {
 				res.send(true);
 			}
-		)  	
+		}
+	)
 })
 
 app.listen(port, () => {

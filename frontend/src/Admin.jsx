@@ -25,6 +25,13 @@ export default function Admin({ user }) {
         return valid;
     }
 
+    const updateCallbackFn = (newData) => {
+        const idx = queryResult.findIndex((e) => e.id === newData.id);
+        if (idx === -1) return;
+        queryResult[idx] = newData;
+        setResult(queryResult);
+    }
+
     const searchQuery = async () => {
         const response = await axios.get('/search', {
             params: {
@@ -178,7 +185,7 @@ export default function Admin({ user }) {
             </Button>
             {
                 (queryResult !== null)
-                    ? <AdminResultTable queryResult={queryResult}></AdminResultTable>
+                    ? <AdminResultTable updateCallback={updateCallbackFn} queryResult={queryResult}></AdminResultTable>
                     : <></>
             }
         </Paper>
