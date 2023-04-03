@@ -107,7 +107,7 @@ for subject in courseCodes:
                     print("\""+comp[12].split(",")[1]+"\", ", end=" ") #firstname
                     print("\""+comp[12].split(",")[0]+"\", ", end=" ") #lastname
                     print( "0,", end=" ") #onbreak bit
-                    print( "NULL);") #pword
+                    print( "\""+comp[12].split(",")[1][0:10]+comp[12].split(",")[0][0:10]+"\");") #pword
                         
                 else:
                     for p in teachPairs:
