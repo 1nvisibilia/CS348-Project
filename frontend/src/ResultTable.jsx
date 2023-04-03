@@ -58,7 +58,7 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
     const renderActions = (id) => {
         if (deleteEnabled) {
             return (
-                <IconButton onClick={() => removeCourse(id)}>
+                <IconButton aria-label="Remove component" onClick={() => removeCourse(id)}>
                     <Tooltip title='Remove Component' placement='top'>
                         <DeleteIcon />
                     </Tooltip>
@@ -67,12 +67,12 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
         }
         return (
             <>
-                <IconButton onClick={() => addCourse('add', id)}>
+                <IconButton aria-label="Add Component" onClick={() => addCourse('add', id)}>
                     <Tooltip title="Add Component" placement="top">
                         <AddIcon></AddIcon>
                     </Tooltip>
                 </IconButton>
-                <IconButton onClick={() => addCourse('report', id)}>
+                <IconButton aria-label="Report Component" onClick={() => addCourse('report', id)}>
                     <Tooltip title="Report Component" placement="top">
                         <InfoIcon></InfoIcon>
                     </Tooltip>
@@ -91,10 +91,10 @@ export default function ResultTable({ user, queryResult, deleteEnabled, onChange
             />
             <div style={{ margin: '2em 0' }}>
                 <Typography variant="overline">
-                    {!deleteEnabled ? <span>{queryResult.length} results found:</span> : <span>Your Schedule:</span>}
+                    {!deleteEnabled ? <h1>{queryResult.length} results found:</h1> : <h1>Your Schedule:</h1>}
                 </Typography>
             </div>
-            <TableContainer component={Paper} variant='outlined'>
+            <TableContainer component={Paper} variant='outlined' role="main">
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>

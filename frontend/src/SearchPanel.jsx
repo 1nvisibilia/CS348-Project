@@ -59,10 +59,11 @@ export default function SearchPanel({ user }) {
 
     return (
         <Paper style={{ margin: '0 4em', padding: '2em' }}>
-            <div>
+            <h1>Course Search</h1>
+            <div role="main">
                 <Box style={{ margin: '0 0 2em', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <FormControl>
-                        <InputLabel>Course Name</InputLabel>
+                        <InputLabel aria-label="Course Name">Course Name</InputLabel>
                         <Select sx={{ width: 120 }}
                             id="demo-simple-select"
                             value={courseSub}
@@ -87,7 +88,7 @@ export default function SearchPanel({ user }) {
                         />
                     </FormControl>
                     <FormControl>
-                        <InputLabel>Availability</InputLabel>
+                        <InputLabel aria-label="Availability">Availability</InputLabel>
                         <Select sx={{ width: 100 }}
                             id="demo-simple-select"
                             value={avail}
@@ -102,7 +103,7 @@ export default function SearchPanel({ user }) {
                         </Select>
                     </FormControl>
                     <FormControl>
-                        <InputLabel>Course Type</InputLabel>
+                        <InputLabel aria-label="Course Type">Course Type</InputLabel>
                         <Select sx={{ width: 100 }}
                             id="demo-simple-select"
                             value={courseType}
@@ -128,8 +129,8 @@ export default function SearchPanel({ user }) {
                                 onChange={(event) => setCourseName(event.target.value)}
                             />
                         </FormControl>
-                        <FormControl>
-                            <InputLabel>Credit</InputLabel>
+                        <FormControl >
+                            <InputLabel aria-label="Credit">Credit</InputLabel>
                             <Select sx={{ width: 120 }}
                                 id="demo-simple-select"
                                 value={credit}
@@ -144,7 +145,7 @@ export default function SearchPanel({ user }) {
                             </Select>
                         </FormControl>
                         <FormControl>
-                            <InputLabel>Campus Location</InputLabel>
+                            <InputLabel aria-label="Campus Location">Campus Location</InputLabel>
                             <Select sx={{ width: 120 }}
                                 id="demo-simple-select"
                                 value={campusOff}
