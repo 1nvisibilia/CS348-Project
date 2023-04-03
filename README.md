@@ -79,6 +79,18 @@ To start the app, navigate to the ___frontend___ directory. Execute the script:
 
 Navigate to the localhost link that appears in the output. 
 
+The logins for Professors are available in [sanitized_prod_data_insert.sql](https://github.com/1nvisibilia/CS348-Project/blob/main/sanitized_prod_data_insert.sql).
+They are the insert statements for the Professor table. Some example Professor logins are:
+ID: 10000027    P: AnnuPuri
+ID: 10000037    P: QiuqiWang
+ID: 10000158    P: BruceWolff
+
+The logins for Students are available in [prod_student_data_insert.sql](https://github.com/1nvisibilia/CS348-Project/blob/main/prod_student_data_insert.sql).
+They are the insert statements for the Student table. Some example Student logins are:
+ID: 10000014    P: jasonperkins
+ID: 10000166    P: kyleatkinson
+ID: 10000560    P: chadjohnson
+
 ## Progress
 For milestone 1, the application implements Feature 2, allowing users to browse through courses offered at the school (based on the sample dataset). Furthermore, there is a partial implementation for feature 1 (finding which course components the user is taking together with each friend) and feature 5 (display a valid weekly schedule involving user specified courses).
 
