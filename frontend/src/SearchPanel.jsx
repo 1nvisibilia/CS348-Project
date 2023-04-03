@@ -228,7 +228,7 @@ export default function SearchPanel({ user }) {
                                         <TableCell align="right">{row.csub}</TableCell>
                                         <TableCell align="right">{row.cnum}</TableCell>
                                         <TableCell align="right">{row.likes}</TableCell>
-                                        <TableCell align="right">{row.cnum}</TableCell>
+                                        <TableCell align="right">{row.popularity}</TableCell>
                                         <TableCell align="right">{row.totEnroll}/{row.totalCap}</TableCell>
                                     </TableRow>
                                 ))}
