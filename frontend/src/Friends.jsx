@@ -60,7 +60,8 @@ export default function SearchPanel({ user }) {
 
     return (
         <Paper style={{ margin: '0 4em', padding: '1em', display: 'flex' }}>
-            <div style={{ width: '400px' }}>
+            <h1>Friends</h1>
+            <div style={{ width: '400px' }} role="main">
                 <div style={{ marginBottom: '1em' }}>My Friends</div>
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                     <TextField
