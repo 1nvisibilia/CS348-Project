@@ -82,6 +82,10 @@ Navigate to the localhost link that appears in the output.
 ## Progress
 For milestone 1, the application implements Feature 2, allowing users to browse through courses offered at the school (based on the sample dataset). Furthermore, there is a partial implementation for feature 1 (finding which course components the user is taking together with each friend) and feature 5 (display a valid weekly schedule involving user specified courses).
 
+For milestone 2, the application finished up the residual implementations for feature 1. Feature 3(add/drop course components) and 6(displaying popular courses) are also implemented. Furthermore, the production dataset was also obtained. The team made minor adjustments to the ER diagrams and the SQL schema.
+
+For the final milestone, we implemented feature 4 (admin login and components updates). We also performed various testings and UI optimizations for both the frontend, backend, and the SQL queries. We have also collectively recorded a demo video for our application.
+
 
 ## Current Features
 
@@ -93,6 +97,20 @@ For milestone 1, the application implements Feature 2, allowing users to browse 
 - Upon arriving at the website, the user is prompted with a login UI. After logging in, in the SEARCH panel, the user can search for courses with complex query conditions, and will be displayed with matching results.
 - Main implementation in: frontend\src\Schedule.jsx
 
+### Add or remove Courses/Components (R8)
+- The users can add components to their shedule in the search panel, by clicking the add icon located at the right of each component from the query result.
+- The users can remove components they are currently enrolled in by clicking the trash icon besides the each course row in the schedule tab.
+- Main implementation in: frontend\src\Schedule.jsx and frontend\src\ResultTable.jsx
+
+### Professors updating Course/Component information (R9)
+- Professors can login with their own id and password. Upon logging in, they will be redirected to an admin page for out application.
+- The admin users(professors) can search for components in a similar fashions as students. However, they have the priviledge to update course/components information, such as course code, start/end time, capacity, etc.
+- Main implementation in: frontend\src\Admin.jsx and frontend\src\AdminResultTable.jsx
+
 ### Displaying a weekly schedule of the user (R10)
 - In the SCHEDULE panel. The user can see a list of components he/she is currently taking. The user can also drop the component they are taking, and add components back in the SEARCH panel.
 - Main implementation in: frontend\src\Schedule.jsx
+
+### Displaying popular courses
+- For students, in the SEARCH panel. There is an option for them to see a list of popular courses. Upon clicking the button, a list of popular courses, ranked by the amount of likes they received will be displayed back to the students.
+- Main implementation in: frontend\src\SearchPanel.jsx
