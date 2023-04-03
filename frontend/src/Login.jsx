@@ -46,22 +46,24 @@ const Login = ({ authSuccessCallback }) => {
 
     return (
         <Grid>
-            <Paper elevation={10} style={paperStyle}>
-                <Grid align='center'>
-                    <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-                    <h2>Sign In</h2>
-                </Grid>
-                <TextField onChange={(event) => setUserName(event.target.value)} value={userName} disabled={loginLock}
-                    style={{ margin: '2em 0' }} label='Student ID #' placeholder='Enter username' variant="outlined" fullWidth required />
-                <TextField onChange={(event) => setUserpw(event.target.value)} value={userpw} disabled={loginLock}
-                    style={{ margin: '0 0 2em' }} label='Password' placeholder='Enter password' type='password' variant="outlined" fullWidth required />
-                <Button onClick={authenticate} type='submit' color='primary' variant="contained" style={btnstyle} disabled={loginLock} fullWidth>Sign in</Button>
-                {
-                    loginLock ? <Typography color={red[500]}>Too many failed attempts, please try again in 60 seconds</Typography>
-                    : loginFailed ? <Typography color={red[500]}>Username or password is incorrect, {failCounter} attempts remaining</Typography>
-                    : <></>
-                }
-            </Paper>
+            <main>
+                <Paper elevation={10} style={paperStyle}>
+                    <Grid align='center'>
+                        <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
+                        <h1>Sign In</h1>
+                    </Grid>
+                    <TextField role="form" onChange={(event) => setUserName(event.target.value)} value={userName} disabled={loginLock}
+                        style={{ margin: '2em 0' }} label='Student ID #' placeholder='Enter username' variant="outlined" fullWidth required />
+                    <TextField role="form" onChange={(event) => setUserpw(event.target.value)} value={userpw} disabled={loginLock}
+                        style={{ margin: '0 0 2em' }} label='Password' placeholder='Enter password' type='password' variant="outlined" fullWidth required />
+                    <Button onClick={authenticate} type='submit' color='primary' variant="contained" style={btnstyle} disabled={loginLock} fullWidth>Sign in</Button>
+                    {
+                        loginLock ? <Typography color={red[500]}>Too many failed attempts, please try again in 60 seconds</Typography>
+                        : loginFailed ? <Typography color={red[500]}>Username or password is incorrect, {failCounter} attempts remaining</Typography>
+                        : <></>
+                    }
+                </Paper>
+            </main>
         </Grid>
     )
 }
