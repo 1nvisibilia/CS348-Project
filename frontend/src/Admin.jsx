@@ -16,7 +16,6 @@ export default function Admin({ user }) {
     const [building, setBuilding] = useState('');
     const [room, setRoom] = useState('');
     const [numberValidity, setValid] = useState(true);
-    const [matchAll, setMatchAll] = useState(true);
     const [queryResult, setResult] = useState(null);
 
     const checkNumberValidity = (courseNum) => {
@@ -46,7 +45,7 @@ export default function Admin({ user }) {
                 building: (building === '') ? null : building,
                 room: (room === '') ? null : room,
 
-                searchAll: matchAll
+                searchAll: false
             }
         });
         setResult(response.data);
@@ -173,11 +172,6 @@ export default function Admin({ user }) {
                     </FormControl>
                 </Box>
             </div>
-            <Button
-                style={{ margin: '0 1em' }}
-                variant="contained" onClick={() => { setMatchAll(!matchAll) }}>
-                {matchAll ? 'Search for All' : 'Search for Any'}
-            </Button>
             <Button
                 style={{ margin: '0 1em' }}
                 variant="contained" onClick={searchQuery}>

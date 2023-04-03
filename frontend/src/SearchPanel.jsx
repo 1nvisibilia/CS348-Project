@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import ResultTable from './ResultTable';
 import { Select, MenuItem, FormControl, InputLabel, TextField, Button, Box, Collapse, Paper, Typography } from '@mui/material';
+import { TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from '@mui/material'
 import { courseSubs } from './courseSubjects';
 
 export default function SearchPanel({ user }) {
@@ -207,7 +208,33 @@ export default function SearchPanel({ user }) {
 
             {
                 popularCourses.length > 0
-                    ? <ResultTable user={user} queryResult={popularCourses} deleteEnabled={false}></ResultTable>
+                    ? <TableContainer component={Paper} variant='outlined'>
+                        <Table aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="right">Subject</TableCell>
+                                    <TableCell align="right">Course Code</TableCell>
+                                    <TableCell align="right">Likes</TableCell>
+                                    <TableCell align="right">Popularity</TableCell>
+                                    <TableCell align="right">Capacity</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {popularCourses.map((row, i) => (
+                                    <TableRow
+                                        key={i}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align="right">{row.csub}</TableCell>
+                                        <TableCell align="right">{row.cnum}</TableCell>
+                                        <TableCell align="right">{row.likes}</TableCell>
+                                        <TableCell align="right">{row.cnum}</TableCell>
+                                        <TableCell align="right">{row.totEnroll}/{row.totalCap}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                     : <></>
             }
         </Paper>
