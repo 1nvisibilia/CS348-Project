@@ -34,7 +34,6 @@ app.get('/login', (req, res) => {
 	 */
 	userID = parseInt(req.query.userName, 10);
 	if (isNaN(userID)) {
-		// no need to throw error here, the server should still function
 		res.send(false);
 		return;
 	}
@@ -44,7 +43,7 @@ app.get('/login', (req, res) => {
 		FROM PROFESSOR
 		WHERE id=${userID} AND pword='${req.query.userpw}'`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			if (results.length > 0) {
 				res.json({ auth: true, admin: true });
 				return;
@@ -54,7 +53,7 @@ app.get('/login', (req, res) => {
 			SELECT id, pword
 			FROM Student
 			WHERE id=${userID} AND pword='${req.query.userpw}'`, (err, results) => {
-				if (err) throw err;
+				if (err) console.error(err);
 				res.json({ auth: results.length > 0, admin: false });
 			})
 		});
@@ -114,7 +113,7 @@ app.get('/search', async (req, res) => {
 		${whereClause && 'WHERE '.concat(whereClause)}
 	`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results)
 		})
 })
@@ -129,7 +128,7 @@ app.get('/friends', async (req, res) => {
 	FROM friends INNER JOIN student ON friendeeid=student.id
 	WHERE frienderid = ${userId}`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results)
 		})
 })
@@ -146,7 +145,7 @@ app.get('/schedule', async (req, res) => {
 			WHERE sid = ${userId}
 		)`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results)
 		}
 	)
@@ -166,7 +165,7 @@ app.get('/sharedClasses', async (req, res) => {
 				AND C.id IN (SELECT cid FROM attends WHERE sid = friendeeid)) AS T
 		ON id = friendeeid`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results)
 		})
 })
@@ -189,7 +188,7 @@ app.get('/popular', (req, res) => {
     GROUP BY csub, cnum) AS T2
 	ORDER BY popularity DESC`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results);
 		})
 })
@@ -208,7 +207,7 @@ app.delete('/modifyFriends', async (req, res) => {
 	DELETE FROM friends
 	WHERE frienderid = ${userId} AND friendeeid = ${target}`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results)
 		})
 })
@@ -225,7 +224,7 @@ app.post('/modifyFriends', async (req, res) => {
 	 */
 	db.query(`INSERT IGNORE INTO friends VALUES(${userId}, ${target})`,
 		(err, results) => {
-			if (err) throw err;
+			if (err) console.error(err);
 			res.send(results)
 		})
 })
@@ -246,7 +245,7 @@ app.delete('/modifyCourse', (req, res) => {
 	DELETE FROM attends
 	WHERE sid = ${userId} and cid = ${target}`,
 		(err, results) => {
-			if (err) throw err
+			if (err) console.error(err);
 			res.send(results)
 		})
 })
@@ -280,12 +279,12 @@ app.post('/modifyCourse', (req, res) => {
 		WHERE sid=${user} AND cid=${componentID}
 		`,
 			(err, results) => {
-				if (err) throw err;
+				if (err) console.error(err);
 				res.send(results.length > 0);
 			}
 		)
 	} else {
-		throw new Error("Invalid add method.");
+		console.error("Invalid add method.");
 	}
 })
 
