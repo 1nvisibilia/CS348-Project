@@ -1284,5 +1284,5 @@ stderr: reason: 1644 (45000): Insert not allowed. Component room conflict exists
 
 stderr: total invalid SQL queries: 428
 stderr: Summary of 2 general error reason(s):
-: Insert not allowed. Component room conflict exists.
 : Insert not allowed. Component teacher conflict exists.
+: Insert not allowed. Component room conflict exists.
